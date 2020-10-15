@@ -33,7 +33,7 @@ namespace Test
                 Frame frame = new Frame();
                 frame.LocalPosition = new Vector2(1, 1);
                 frame.Size = new Vector2(100 - (2 * i), 100 - (2 * i));
-                frame.Color = new Color4((float)rng.NextDouble(), (float)rng.NextDouble(), (float)rng.NextDouble(), .1f);
+                frame.Color = new Color4((float)rng.NextDouble(), (float)rng.NextDouble(), (float)rng.NextDouble(), 1);
                 last.AddChild(frame);
                 last = frame;
             }

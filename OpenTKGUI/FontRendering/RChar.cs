@@ -10,7 +10,7 @@ namespace OpenTKGUI.FontRendering
 {
     internal class RChar
     {
-        public Transform Transform = new Transform();
+        //public Transform Transform = new Transform();
         public Font.Character FontCharacter;
         public Color4 Color = Color4.Black;
 
@@ -25,7 +25,7 @@ namespace OpenTKGUI.FontRendering
         public RChar(char c, Font font)
         {
             FontCharacter = font.Characters[c];
-            Transform.Scale = new Vector3(FontCharacter.Width, FontCharacter.Height, 1);
+            //Transform.Scale = new Vector3(FontCharacter.Width, FontCharacter.Height, 1);
         }
 
         public void Draw(Shader shader, Matrix4 parentTransform, Matrix4 guiTransform)
@@ -33,17 +33,17 @@ namespace OpenTKGUI.FontRendering
             shader.Use();
             shader.SetUniformMatrix("GUITransform", true, guiTransform);
             shader.SetUniformMatrix("ParentTransform", true, parentTransform);
-            shader.SetUniformMatrix("ModelTransform", true, Transform.GetMatrix());
+            //shader.SetUniformMatrix("ModelTransform", true, Transform.GetMatrix());
             shader.SetUniform4("TextColor", new Vector4(Color.R, Color.G, Color.B, Color.A));
             shader.SetUniform1("uvs", FontCharacter.UVRegion());
             FontCharacter.Font.FontBitmap.Bind(shader, "tex");
             VertexArray.TextSquare.Draw();
         }
 
-        public void Draw(Shader shader, Transform parent, Transform guiTransform)
-        {
-            Draw(shader, parent.GetMatrix(), guiTransform.GetMatrix());
-        }
+        //public void Draw(Shader shader, Transform parent, Transform guiTransform)
+        //{
+            //Draw(shader, parent.GetMatrix(), guiTransform.GetMatrix());
+        //}
 
     }
 }

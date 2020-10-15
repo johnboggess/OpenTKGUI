@@ -14,7 +14,7 @@ namespace OpenTKGUI.FontRendering
     internal class RString
     {
         private List<RChar> _chars = new List<RChar>();
-        public Transform Transform = new Transform();
+        //public Transform Transform = new Transform();
 
         public static RString Create(string str, Font font)
         {
@@ -35,7 +35,7 @@ namespace OpenTKGUI.FontRendering
             {
                 int xoffset = cursorX + _chars[i].XOffest;
 
-                _chars[i].Transform.Position.X += xoffset;
+                //_chars[i].Transform.Position.X += xoffset;
 
                 cursorX += _chars[i].XAdvance;
                 if (i < chars.Count - 1)
@@ -44,20 +44,20 @@ namespace OpenTKGUI.FontRendering
                 int yoffset = chars[i].Font.LineHeight - chars[i].Height;
                 yoffset -= chars[i].YOffset;
 
-                _chars[i].Transform.Position.Y += yoffset;
+                //_chars[i].Transform.Position.Y += yoffset;
             }
         }
 
         public void Draw(Shader shader, Matrix4 guiTransform)
         {
-            for(int i = _chars.Count - 1; i >= 0; i--)
-                _chars[i].Draw(shader, Transform.GetMatrix(), guiTransform);
+            //for(int i = _chars.Count - 1; i >= 0; i--)
+                //_chars[i].Draw(shader, Transform.GetMatrix(), guiTransform);
         }
 
-        public void Draw(Shader shader, Transform guiTransform)
+        /*public void Draw(Shader shader, Transform guiTransform)
         {
             Draw(shader, guiTransform.GetMatrix());
-        }
+        }*/
 
         public void Draw(Shader shader)
         {
