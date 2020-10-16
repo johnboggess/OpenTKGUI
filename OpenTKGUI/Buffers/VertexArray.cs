@@ -10,7 +10,7 @@ namespace OpenTKGUI.Buffers
     /// </summary>
     public class VertexArray : IDisposable
     {
-        public static readonly VertexArray TextSquare = CreateTextSquare();
+        public static readonly VertexArray Square = CreateTextSquare();
 
         public bool Disposed { get { return _disposed; } }
 

@@ -37,7 +37,7 @@ namespace OpenTKGUI.FontRendering
             shader.SetUniform4("TextColor", new Vector4(Color.R, Color.G, Color.B, Color.A));
             shader.SetUniform1("uvs", FontCharacter.UVRegion());
             FontCharacter.Font.FontBitmap.Bind(shader, "tex");
-            VertexArray.TextSquare.Draw();
+            VertexArray.Square.Draw();
         }
 
         //public void Draw(Shader shader, Transform parent, Transform guiTransform)

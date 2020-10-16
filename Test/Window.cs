@@ -16,8 +16,6 @@ namespace Test
 {
     class Window : GameWindow
     {
-        Frame Frame;
-        Frame Frame2;
         public Window(GameWindowSettings gws, NativeWindowSettings nws) : base (gws, nws)
         {
         }
@@ -28,12 +26,12 @@ namespace Test
 
             GUIElement last = GUIManager.Root;
             Random rng = new Random();
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 1; i++)
             {
-                Frame frame = new Frame();
+                Image frame = new Image("Fonts\\Arial32_0.png");
                 frame.LocalPosition = new Vector2(1, 1);
                 frame.Size = new Vector2(100 - (2 * i), 100 - (2 * i));
-                frame.Color = new Color4((float)rng.NextDouble(), (float)rng.NextDouble(), (float)rng.NextDouble(), 1);
+                //frame.Color = new Color4((float)rng.NextDouble(), (float)rng.NextDouble(), (float)rng.NextDouble(), 1);
                 last.AddChild(frame);
                 last = frame;
             }
@@ -41,6 +39,7 @@ namespace Test
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.FramebufferSrgb);
             GL.Enable(EnableCap.CullFace);
+            GL.Enable(EnableCap.Texture2D);
             GL.Enable(EnableCap.Blend);
 
             GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);

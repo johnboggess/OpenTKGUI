@@ -21,7 +21,7 @@ namespace OpenTKGUI.GUIElements
             GUIManager._ColoredShader.SetUniformMatrix("globalGUITransform", false, GUIManager._Transform);
             GUIManager._ColoredShader.SetUniformMatrix("elementTransform", false, Transform * Matrix4.CreateTranslation(new Vector3(parentGlobalPosition.X, parentGlobalPosition.Y, depth)));
 
-            VertexArray.TextSquare.Draw();
+            VertexArray.Square.Draw();
 
             base.Draw(parentGlobalPosition, depth);
         }
