@@ -120,12 +120,15 @@ namespace OpenTKGUI.GUIElements
 
         internal void _MouseButtonEvent(MouseButtonEventArgs args)
         {
-            if (OnMouseButton != null && IsPointInside(GUIManager.GUIMousePosition()))
+            if (IsPointInside(GUIManager.GUIMousePosition()))
             {
                 if (GUIManager.FocusedElement == null && Focusable)
                     GUIManager.FocusedElement = this;
-                if (!OnMouseButton.Invoke(args))
-                    return;
+                if (OnMouseButton != null)
+                {
+                    if (!OnMouseButton.Invoke(args))
+                        return;
+                }
             }
             foreach (GUIElement child in _children)
                 child._MouseButtonEvent(args);

@@ -22,6 +22,7 @@ namespace Test
         Label Label;
         Frame Border;
         Frame Frame;
+        TextBox TextBox;
         public Window(GameWindowSettings gws, NativeWindowSettings nws) : base (gws, nws)
         {
         }
@@ -33,10 +34,13 @@ namespace Test
             GUIManager.Init(this);
             FontManager.Init("Fonts");
 
-            Label = new Label("The quick brown fox jumps over the lazy dog", FontManager.GetFont("Arial", 32)) { LocalPosition = new Vector2(5, 2) };
+            Label = new Label("The quick brown fox jumps over the lazy dog WA", FontManager.GetFont("Arial", 32)) { LocalPosition = new Vector2(5, 2) };
             Border = new Frame() { Size = new Vector2(Label.Size.X + 10, 40), Color = Color4.Black };
             Border.LocalPosition = new Vector2(Size.X / 2 - Border.Size.X / 2, Size.Y / 2 - Border.Size.Y / 2);
             Frame = new Frame() { Size = Border.Size - new Vector2(2, 2), LocalPosition = new Vector2(1, 1), Color = Color4.White };
+
+            TextBox = new TextBox(FontManager.GetFont("Arial", 32));
+            TextBox.Size = new Vector2(100, 40);
 
             Frame.OnMouseButton = new Func<MouseButtonEventArgs, bool>((a) =>
             {
@@ -50,6 +54,7 @@ namespace Test
             Frame.AddChild(Label);
 
             GUIManager.Root.AddChild(Border);
+            GUIManager.Root.AddChild(TextBox);
 
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.FramebufferSrgb);
@@ -66,6 +71,7 @@ namespace Test
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             GUIManager.Draw(new Vector2(0, 0));
+
             Context.SwapBuffers();
         }
     }

@@ -21,7 +21,8 @@ namespace OpenTKGUI.FontRendering
             List<RChar> chars = new List<RChar>();
             for(int i = 0; i < str.Length; i++)
             {
-                chars.Add(new RChar(str[i], font));
+                if(font.Characters.ContainsKey(str[i]))
+                    chars.Add(new RChar(str[i], font));
             }
             return new RString(chars);
         }
