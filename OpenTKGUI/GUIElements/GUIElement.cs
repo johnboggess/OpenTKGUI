@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Desktop;
+using OpenTK.Windowing.Common;
 namespace OpenTKGUI.GUIElements
 {
     public class GUIElement
     {
         public Matrix4 Transform = Matrix4.Identity;
+        public Func<MouseButtonEventArgs, bool> OnMouseEvent;
 
         internal GUIElement _Parent;
 
@@ -81,6 +84,14 @@ namespace OpenTKGUI.GUIElements
             _children.Remove(element);
         }
 
+        public bool IsPointInside(Vector2 point)
+        {
+            Vector2 bl = GlobalPosition;
+            Vector2 tr = bl + Size;
+
+            return bl.X <= point.X && tr.X >= point.X && bl.Y <= point.Y && tr.Y >= point.Y;
+        }
+
         public virtual void Draw(Vector2 parentGlobalPosition, int depth)
         {
             draw(parentGlobalPosition, depth);
@@ -98,6 +109,14 @@ namespace OpenTKGUI.GUIElements
                 child.OnKeyPressed(c);
         }
 
+        public virtual void MouseButtonEvent(MouseButtonEventArgs args)
+        {
+            if (OnMouseEvent != null && IsPointInside(GUIManager.GUIMousePosition()))
+                if (!OnMouseEvent.Invoke(args))
+                    return;
+            foreach (GUIElement child in _children)
+                child.MouseButtonEvent(args);
+        }
 
         protected void draw(Vector2 parentGlobalPosition, int depth)
         {
