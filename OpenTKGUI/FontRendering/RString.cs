@@ -8,13 +8,13 @@ using OpenTK.Graphics.OpenGL4;
 
 using OpenTKGUI;
 using OpenTKGUI.Shaders;
+using OpenTKGUI.GUIElements;
 
 namespace OpenTKGUI.FontRendering
 {
-    internal class RString
+    internal class RString : GUIElement
     {
         private List<RChar> _chars = new List<RChar>();
-        //public Transform Transform = new Transform();
 
         public static RString Create(string str, Font font)
         {
@@ -35,7 +35,7 @@ namespace OpenTKGUI.FontRendering
             {
                 int xoffset = cursorX + _chars[i].XOffest;
 
-                //_chars[i].Transform.Position.X += xoffset;
+                _chars[i].LocalPosition += new Vector2(xoffset, 0);
 
                 cursorX += _chars[i].XAdvance;
                 if (i < chars.Count - 1)
@@ -44,24 +44,15 @@ namespace OpenTKGUI.FontRendering
                 int yoffset = chars[i].Font.LineHeight - chars[i].Height;
                 yoffset -= chars[i].YOffset;
 
-                //_chars[i].Transform.Position.Y += yoffset;
+                _chars[i].LocalPosition += new Vector2(0, yoffset);
             }
         }
 
-        public void Draw(Shader shader, Matrix4 guiTransform)
+        public override void Draw(Vector2 parentGlobalPosition, int depth)
         {
-            //for(int i = _chars.Count - 1; i >= 0; i--)
-                //_chars[i].Draw(shader, Transform.GetMatrix(), guiTransform);
-        }
-
-        /*public void Draw(Shader shader, Transform guiTransform)
-        {
-            Draw(shader, guiTransform.GetMatrix());
-        }*/
-
-        public void Draw(Shader shader)
-        {
-            Draw(shader, Matrix4.Identity);
+            for (int i = _chars.Count - 1; i >= 0; i--)
+                _chars[i].Draw(parentGlobalPosition, depth);
+            base.Draw(parentGlobalPosition, depth);
         }
 
         public void SetTextColor(Color4 Color)
@@ -85,6 +76,24 @@ namespace OpenTKGUI.FontRendering
                     cursorX += _chars[i].Font.GetKerning(_chars[i].Char, _chars[i + 1].Char);
             }
             return cursorX;
+        }
+
+        public int GetHeight()//todo: get height of string
+        {
+            /*int max = int.MinValue;
+            int min = int.MaxValue;
+            for (int i = 0; i < _chars.Count; i++)
+            {
+                int bottom = _chars[i].Font.LineHeight - _chars[i].Height;
+                bottom -= _chars[i].YOffset;
+                min = Math.Min(min, bottom);
+                max = Math.Max(max, bottom + _chars[i].Height);
+            }
+            return max-min;*/
+
+            if (_chars.Count == 0)
+                return 0;
+            return _chars[0].Font.LineHeight;
         }
     }
 }

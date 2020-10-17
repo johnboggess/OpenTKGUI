@@ -10,12 +10,17 @@ using OpenTK.Mathematics;
 
 using OpenTKGUI.Shaders;
 using OpenTKGUI.GUIElements;
+using OpenTKGUI.FontRendering;
 using OpenTKGUI;
+using System.Runtime.CompilerServices;
 
 namespace Test
 {
     class Window : GameWindow
     {
+        Label Label;
+        Frame Border;
+        Frame Frame;
         public Window(GameWindowSettings gws, NativeWindowSettings nws) : base (gws, nws)
         {
         }
@@ -23,18 +28,18 @@ namespace Test
         protected override void OnLoad()
         {
             GUIManager.Init(this);
+            FontManager.Init("Fonts");
 
-            GUIElement last = GUIManager.Root;
-            Random rng = new Random();
-            for (int i = 0; i < 1; i++)
-            {
-                Image frame = new Image("Fonts\\Arial32_0.png");
-                frame.LocalPosition = new Vector2(1, 1);
-                frame.Size = new Vector2(100 - (2 * i), 100 - (2 * i));
-                //frame.Color = new Color4((float)rng.NextDouble(), (float)rng.NextDouble(), (float)rng.NextDouble(), 1);
-                last.AddChild(frame);
-                last = frame;
-            }
+
+            Label = new Label("The quick brown fox jumps over the lazy dog", FontManager.GetFont("Arial", 32)) { LocalPosition = new Vector2(5, 2) };
+            Border = new Frame() { Size = new Vector2(Label.Size.X+10, 40), Color = Color4.Black };
+            Border.LocalPosition = new Vector2(Size.X / 2 - Border.Size.X / 2, Size.Y / 2 - Border.Size.Y / 2);
+            Frame = new Frame() { Size = Border.Size-new Vector2(2,2), LocalPosition = new Vector2(1,1), Color = Color4.White };
+
+            Border.AddChild(Frame);
+            Frame.AddChild(Label);
+
+            GUIManager.Root.AddChild(Border);
 
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.FramebufferSrgb);
@@ -50,7 +55,7 @@ namespace Test
         protected override void OnRenderFrame(FrameEventArgs args)
         {
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            GUIManager.Draw(Vector2.Zero);
+            GUIManager.Draw(new Vector2(0, 0));
             Context.SwapBuffers();
         }
     }

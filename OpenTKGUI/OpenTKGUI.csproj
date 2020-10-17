@@ -26,6 +26,12 @@
     <None Update="Shaders\Default.vert">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Shaders\Font.frag">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Shaders\Font.vert">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Shaders\Textured.frag">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

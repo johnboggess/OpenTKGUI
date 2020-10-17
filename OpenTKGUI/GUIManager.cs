@@ -18,6 +18,7 @@ namespace OpenTKGUI
         internal static Shader _DefaultShader;
         internal static Shader _ColoredShader;
         internal static Shader _TexturedShader;
+        internal static Shader _FontShader;
         internal static Matrix4 _Transform;
 
         private static int farClipping = 10000;
@@ -28,6 +29,7 @@ namespace OpenTKGUI
             _DefaultShader = new DefaultShader();
             _ColoredShader = new ColoredShader();
             _TexturedShader = new TexturedShader();
+            _FontShader = new FontShader();
 
             _Transform = Matrix4.Identity;
             _Transform.M41 = -1;

@@ -6,7 +6,7 @@ using System.Numerics;
 
 namespace OpenTKGUI.FontRendering
 {
-    internal class Font
+    public class Font
     {
         public string Face;
         public int Size;
@@ -15,8 +15,9 @@ namespace OpenTKGUI.FontRendering
         public int Base;
         public int FontBitmapWidth;
         public int FontBitmapHeight;
-        public TextureData FontBitmapData;
-        public Texture FontBitmap;
+
+        internal TextureData _FontBitmapData;
+        internal Texture _FontBitmap;
 
         public Dictionary<char, Character> Characters = new Dictionary<char, Character>();
         public Dictionary<Tuple<char, char>, Kerning> Kernings = new Dictionary<Tuple<char, char>, Kerning>();

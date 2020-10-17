@@ -12,7 +12,7 @@ using OpenTK.Graphics.OpenGL4;
 namespace OpenTKGUI.FontRendering
 {
     //font bitmaps generated form https://www.angelcode.com/products/bmfont/
-    internal static class FontManager
+    public static class FontManager
     {
         static Dictionary<string, Font> _fonts = new Dictionary<string, Font>();
         public static void Init(string fontFolder)
@@ -43,10 +43,10 @@ namespace OpenTKGUI.FontRendering
             Font font = new Font();
 
             XElement page = xDocument.Descendants(XName.Get("page")).FirstOrDefault();
-            font.FontBitmapData = new TextureData(fontFolder + "\\" + page.Attribute(XName.Get("file")).Value);
-            font.FontBitmap = font.FontBitmapData.CreateTexture(TextureUnit.Texture0);
-            font.FontBitmap.TextureMagFilter = TextureMagFilter.Nearest;
-            font.FontBitmap.TextureMinFilter = TextureMinFilter.Nearest;
+            font._FontBitmapData = new TextureData(fontFolder + "\\" + page.Attribute(XName.Get("file")).Value);
+            font._FontBitmap = font._FontBitmapData.CreateTexture(TextureUnit.Texture0);
+            font._FontBitmap.TextureMagFilter = TextureMagFilter.Nearest;
+            font._FontBitmap.TextureMinFilter = TextureMinFilter.Nearest;
 
             font.Face = info.Attribute(XName.Get("face")).Value;
             font.Size = int.Parse(info.Attribute(XName.Get("size")).Value);
