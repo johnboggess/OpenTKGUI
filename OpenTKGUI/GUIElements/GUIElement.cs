@@ -10,7 +10,11 @@ namespace OpenTKGUI.GUIElements
     public class GUIElement
     {
         public Matrix4 Transform = Matrix4.Identity;
-        public Func<MouseButtonEventArgs, bool> OnMouseEvent;
+        public bool Focusable = false;
+
+        public Func<MouseButtonEventArgs, bool> OnMouseButton;
+        public Action<KeyboardKeyEventArgs> OnKeyDown;
+        public Action<KeyboardKeyEventArgs> OnKeyUp;
 
         internal GUIElement _Parent;
 
@@ -55,6 +59,11 @@ namespace OpenTKGUI.GUIElements
         public GUIElement Parent
         {
             get { return _Parent; }
+        }
+
+        public bool IsFocused
+        {
+            get { return GUIManager.FocusedElement == this; }
         }
 
         public void AddChild(GUIElement element)
@@ -109,13 +118,17 @@ namespace OpenTKGUI.GUIElements
                 child.OnKeyPressed(c);
         }
 
-        public virtual void MouseButtonEvent(MouseButtonEventArgs args)
+        internal void _MouseButtonEvent(MouseButtonEventArgs args)
         {
-            if (OnMouseEvent != null && IsPointInside(GUIManager.GUIMousePosition()))
-                if (!OnMouseEvent.Invoke(args))
+            if (OnMouseButton != null && IsPointInside(GUIManager.GUIMousePosition()))
+            {
+                if (GUIManager.FocusedElement == null && Focusable)
+                    GUIManager.FocusedElement = this;
+                if (!OnMouseButton.Invoke(args))
                     return;
+            }
             foreach (GUIElement child in _children)
-                child.MouseButtonEvent(args);
+                child._MouseButtonEvent(args);
         }
 
         protected void draw(Vector2 parentGlobalPosition, int depth)

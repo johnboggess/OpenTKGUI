@@ -38,12 +38,13 @@ namespace Test
             Border.LocalPosition = new Vector2(Size.X / 2 - Border.Size.X / 2, Size.Y / 2 - Border.Size.Y / 2);
             Frame = new Frame() { Size = Border.Size - new Vector2(2, 2), LocalPosition = new Vector2(1, 1), Color = Color4.White };
 
-            Frame.OnMouseEvent = new Func<MouseButtonEventArgs, bool>((a) =>
+            Frame.OnMouseButton = new Func<MouseButtonEventArgs, bool>((a) =>
             {
                 if (a.Button == MouseButton.Left && a.IsPressed)
                     Frame.Color = new Color4((float)rng.NextDouble(), (float)rng.NextDouble(), (float)rng.NextDouble(), 1);
                 return true;
             });
+
 
             Border.AddChild(Frame);
             Frame.AddChild(Label);

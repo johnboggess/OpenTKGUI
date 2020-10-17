@@ -16,6 +16,7 @@ namespace OpenTKGUI
     {
         public static GameWindow GameWindow;
         public static GUIElement Root;
+        public static GUIElement FocusedElement = null;
 
         internal static Shader _DefaultShader;
         internal static Shader _ColoredShader;
@@ -52,10 +53,6 @@ namespace OpenTKGUI
             Root.Draw(offset, -farClipping);
         }
 
-        public static void MousePressedEvent(MouseButtonEventArgs args)
-        {
-            Root.MouseButtonEvent(args);
-        }
 
         public static Vector2 GUIMousePosition()
         {
@@ -65,9 +62,21 @@ namespace OpenTKGUI
 
         private static void _setUpEvents()
         {
-            Action<MouseButtonEventArgs> mouseButton = new Action<MouseButtonEventArgs>((a) => Root.MouseButtonEvent(a));
+            Action<MouseButtonEventArgs> mouseButton = new Action<MouseButtonEventArgs>((a) => { FocusedElement = null; Root._MouseButtonEvent(a); });
             GameWindow.MouseDown += mouseButton;
             GameWindow.MouseUp += mouseButton;
+
+            GameWindow.KeyDown += new Action<KeyboardKeyEventArgs>((a) =>
+            {
+                if (FocusedElement != null && FocusedElement.OnKeyDown != null)
+                    FocusedElement.OnKeyDown.Invoke(a);
+            });
+
+            GameWindow.KeyUp += new Action<KeyboardKeyEventArgs>((a) =>
+            {
+                if (FocusedElement != null && FocusedElement.OnKeyUp != null)
+                    FocusedElement.OnKeyUp.Invoke(a);
+            });
         }
     }
 }
