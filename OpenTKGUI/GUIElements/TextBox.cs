@@ -34,12 +34,15 @@ namespace OpenTKGUI.GUIElements
             Focusable = true;
             _lbl = new Label("", font);
 
+            OnTextInput = new Action<TextInputEventArgs>((a) =>
+            {
+                Text += a.AsString;
+            });
+
             OnKeyDown = new Action<KeyboardKeyEventArgs>((a) =>
             {
-                if (a.Key != Keys.Backspace)
-                    Text += (char)a.Key;
-                else
-                    Text = Text.Substring(0, Text.Length - 1);
+                if (a.Key == Keys.Backspace)
+                    Text = Text.Substring(0, Text.Length-1);
             });
         }
 

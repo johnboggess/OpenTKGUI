@@ -77,6 +77,12 @@ namespace OpenTKGUI
                 if (FocusedElement != null && FocusedElement.OnKeyUp != null)
                     FocusedElement.OnKeyUp.Invoke(a);
             });
+            
+            GameWindow.TextInput += new Action<TextInputEventArgs>((a) =>
+            {
+                if (FocusedElement != null && FocusedElement.OnTextInput != null)
+                    FocusedElement.OnTextInput.Invoke(a);
+            });
         }
     }
 }

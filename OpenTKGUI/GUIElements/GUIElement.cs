@@ -15,6 +15,7 @@ namespace OpenTKGUI.GUIElements
         public Func<MouseButtonEventArgs, bool> OnMouseButton;
         public Action<KeyboardKeyEventArgs> OnKeyDown;
         public Action<KeyboardKeyEventArgs> OnKeyUp;
+        public Action<TextInputEventArgs> OnTextInput;
 
         internal GUIElement _Parent;
 
@@ -104,18 +105,6 @@ namespace OpenTKGUI.GUIElements
         public virtual void Draw(Vector2 parentGlobalPosition, int depth)
         {
             draw(parentGlobalPosition, depth);
-        }
-
-        public virtual void OnResize()
-        {
-            foreach (GUIElement child in _children)
-                child.OnResize();
-        }
-
-        public virtual void OnKeyPressed(char c)
-        {
-            foreach (GUIElement child in _children)
-                child.OnKeyPressed(c);
         }
 
         internal void _MouseButtonEvent(MouseButtonEventArgs args)
