@@ -63,8 +63,16 @@ namespace OpenTKGUI
         private static void _setUpEvents()
         {
             Action<MouseButtonEventArgs> mouseButton = new Action<MouseButtonEventArgs>((a) => { FocusedElement = null; Root._MouseButtonEvent(a); });
+            Action<MouseButtonEventArgs> globalMouseButton = new Action<MouseButtonEventArgs>((a) => { Root._GlobalMouseButtonEvent(a); });
             GameWindow.MouseDown += mouseButton;
+            GameWindow.MouseDown += globalMouseButton;
             GameWindow.MouseUp += mouseButton;
+            GameWindow.MouseUp += globalMouseButton;
+
+            GameWindow.MouseMove += new Action<MouseMoveEventArgs>((a) =>
+            {
+                Root._GlobalMouseMoveEvent(a);
+            });
 
             GameWindow.KeyDown += new Action<KeyboardKeyEventArgs>((a) =>
             {

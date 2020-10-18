@@ -13,6 +13,10 @@ namespace OpenTKGUI.GUIElements
         public bool Focusable = false;
 
         public Func<MouseButtonEventArgs, bool> OnMouseButton;
+        public Action<MouseButtonEventArgs> OnGlobalMouseButton;
+
+        public Action<MouseMoveEventArgs> OnGlobalMouseMove;
+
         public Action<KeyboardKeyEventArgs> OnKeyDown;
         public Action<KeyboardKeyEventArgs> OnKeyUp;
         public Action<TextInputEventArgs> OnTextInput;
@@ -28,13 +32,8 @@ namespace OpenTKGUI.GUIElements
             {
                 Transform.M41 = value.X;
                 Transform.M42 = value.Y;
+                _PositionChanged();
             }
-        }
-
-        public float Depth
-        {
-            get { return Transform.M43; }
-            set { Transform.M43 = value; }
         }
 
         public Vector2 GlobalPosition
@@ -54,6 +53,7 @@ namespace OpenTKGUI.GUIElements
             {
                 Transform.M11 = value.X;
                 Transform.M22 = value.Y;
+                _SizeChanged();
             }
         }
 
@@ -122,6 +122,25 @@ namespace OpenTKGUI.GUIElements
             foreach (GUIElement child in _children)
                 child._MouseButtonEvent(args);
         }
+
+        internal void _GlobalMouseButtonEvent(MouseButtonEventArgs args)
+        {
+            if (OnGlobalMouseButton != null)
+                OnGlobalMouseButton.Invoke(args);
+            foreach (GUIElement child in _children)
+                child._GlobalMouseButtonEvent(args);
+        }
+
+        internal void _GlobalMouseMoveEvent(MouseMoveEventArgs args)
+        {
+            if (OnGlobalMouseMove != null)
+                OnGlobalMouseMove.Invoke(args);
+            foreach (GUIElement child in _children)
+                child._GlobalMouseMoveEvent(args);
+        }
+
+        internal virtual void _PositionChanged() { }
+        internal virtual void _SizeChanged() { }
 
         protected void draw(Vector2 parentGlobalPosition, int depth)
         {

@@ -41,7 +41,7 @@ namespace OpenTKGUI.GUIElements
 
             OnKeyDown = new Action<KeyboardKeyEventArgs>((a) =>
             {
-                if (a.Key == Keys.Backspace)
+                if (a.Key == Keys.Backspace && Text.Length > 0)
                     Text = Text.Substring(0, Text.Length-1);
             });
         }

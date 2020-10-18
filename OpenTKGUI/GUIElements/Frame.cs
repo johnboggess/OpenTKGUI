@@ -11,7 +11,7 @@ namespace OpenTKGUI.GUIElements
 {
     public class Frame : GUIElement
     {
-        public Color4 Color = Color4.Red;
+        public Color4 Color = Color4.White;
 
         public override void Draw(Vector2 parentGlobalPosition, int depth)
         {

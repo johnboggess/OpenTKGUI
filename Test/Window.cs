@@ -23,6 +23,8 @@ namespace Test
         Frame Border;
         Frame Frame;
         TextBox TextBox;
+        Slider Slider;
+        Label sldrLbl;
         public Window(GameWindowSettings gws, NativeWindowSettings nws) : base (gws, nws)
         {
         }
@@ -34,13 +36,27 @@ namespace Test
             GUIManager.Init(this);
             FontManager.Init("Fonts");
 
-            Label = new Label("The quick brown fox jumps over the lazy dog WA", FontManager.GetFont("Arial", 32)) { LocalPosition = new Vector2(5, 2) };
+            Label = new Label("The quick brown fox jumps over the lazy dog WA fj", FontManager.GetFont("Arial", 32)) { LocalPosition = new Vector2(5, 2) };
             Border = new Frame() { Size = new Vector2(Label.Size.X + 10, 40), Color = Color4.Black };
             Border.LocalPosition = new Vector2(Size.X / 2 - Border.Size.X / 2, Size.Y / 2 - Border.Size.Y / 2);
             Frame = new Frame() { Size = Border.Size - new Vector2(2, 2), LocalPosition = new Vector2(1, 1), Color = Color4.White };
 
             TextBox = new TextBox(FontManager.GetFont("Arial", 32));
-            TextBox.Size = new Vector2(100, 40);
+            TextBox.Size = new Vector2(500, 40);
+            TextBox.Text = "Text box";
+
+            Slider = new Slider();
+            Slider.Size = new Vector2(200, 40);
+            Slider.LocalPosition = new Vector2(0, 100);
+            Slider.OnValueChanged = new Action<float, float>((oldV, newV) =>
+            {
+                sldrLbl.Text = newV.ToString();
+            });
+
+            sldrLbl = new Label(Slider.Value.ToString(), FontManager.GetFont("Arial", 32));
+            sldrLbl.Size = new Vector2(200, 40);
+            sldrLbl.LocalPosition = new Vector2(0, 140);
+
 
             Frame.OnMouseButton = new Func<MouseButtonEventArgs, bool>((a) =>
             {
@@ -55,6 +71,8 @@ namespace Test
 
             GUIManager.Root.AddChild(Border);
             GUIManager.Root.AddChild(TextBox);
+            GUIManager.Root.AddChild(Slider);
+            GUIManager.Root.AddChild(sldrLbl);
 
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.FramebufferSrgb);
