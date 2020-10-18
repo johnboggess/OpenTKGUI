@@ -56,6 +56,9 @@ namespace OpenTKGUI.GUIElements
             set { _value = value; _SizeChanged(); }
         }
 
+        public Color4 BorderColor { get { return _Background.BorderColor; } set { _Background.BorderColor = value; } }
+        public float BorderSize { get { return _Background.BorderSize; } set { _Background.BorderSize = value; } }
+
         internal Frame _Background = new Frame();
         internal Frame _Track = new Frame() { Color = Color4.LightGray };
         internal Frame _Thumb = new Frame() { Color = Color4.Blue };

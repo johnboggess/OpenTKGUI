@@ -25,13 +25,18 @@ namespace OpenTKGUI.GUIElements
             set { _lbl.TextColor = value; }
         }
 
-        public Color4 BackgroundColor = Color4.White;
+        public Color4 BackgroundColor { get { return _frame.Color; } set { _frame.Color = value; } }
+        public Color4 BorderColor { get { return _frame.BorderColor; } set { _frame.BorderColor = value; } }
+        public float BorderSize { get { return _frame.BorderSize; } set { _frame.BorderSize = value; } }
 
+        Frame _frame;
         Label _lbl;
 
         public TextBox(Font font)
         {
             Focusable = true;
+
+            _frame = new Frame();
             _lbl = new Label("", font);
 
             OnTextInput = new Action<TextInputEventArgs>((a) =>
@@ -48,17 +53,15 @@ namespace OpenTKGUI.GUIElements
 
         public override void Draw(Vector2 parentGlobalPosition, int depth)
         {
-            GUIManager._ColoredShader.Use();
-
-            GUIManager._ColoredShader.SetUniform4("Color", BackgroundColor);
-            GUIManager._ColoredShader.SetUniformMatrix("globalGUITransform", false, GUIManager._Transform);
-            GUIManager._ColoredShader.SetUniformMatrix("elementTransform", false, Transform * Matrix4.CreateTranslation(new Vector3(parentGlobalPosition.X, parentGlobalPosition.Y, depth)));
-
-            VertexArray.Square.Draw();
-
-            _lbl.Draw(parentGlobalPosition + LocalPosition, depth + 1);
+            _frame.Draw(parentGlobalPosition + LocalPosition, depth + 2);
+            _lbl.Draw(parentGlobalPosition + LocalPosition, depth + 2);
 
             base.Draw(parentGlobalPosition, depth);
+        }
+
+        internal override void _SizeChanged()
+        {
+            _frame.Size = Size;
         }
     }
 }

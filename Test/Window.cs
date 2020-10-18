@@ -20,7 +20,6 @@ namespace Test
     class Window : GameWindow
     {
         Label Label;
-        Frame Border;
         Frame Frame;
         TextBox TextBox;
         Slider Slider;
@@ -38,13 +37,15 @@ namespace Test
             FontManager.Init("Fonts");
 
             Label = new Label("The quick brown fox jumps over the lazy dog WA fj", FontManager.GetFont("Arial", 32)) { LocalPosition = new Vector2(5, 2) };
-            Border = new Frame() { Size = new Vector2(Label.Size.X + 10, 40), Color = Color4.Black };
-            Border.LocalPosition = new Vector2(Size.X / 2 - Border.Size.X / 2, Size.Y / 2 - Border.Size.Y / 2);
-            Frame = new Frame() { Size = Border.Size - new Vector2(2, 2), LocalPosition = new Vector2(1, 1), Color = Color4.White };
+            Frame = new Frame();
+            Frame.LocalPosition = new Vector2(Size.X / 2f - Label.Size.X / 2f, Size.Y/2f);
+            Frame.Size = new Vector2(Label.Size.X + 10, Label.Size.Y);
+            Frame.BorderSize = 1;
 
             TextBox = new TextBox(FontManager.GetFont("Arial", 32));
             TextBox.Size = new Vector2(500, 40);
             TextBox.Text = "Text box";
+            TextBox.BorderSize = 1;
 
             Slider = new Slider();
             Slider.Size = new Vector2(200, 40);
@@ -53,6 +54,7 @@ namespace Test
             {
                 sldrLbl.Text = newV.ToString();
             });
+            Slider.BorderSize = 1;
 
             sldrLbl = new Label(Slider.Value.ToString(), FontManager.GetFont("Arial", 32));
             sldrLbl.Size = new Vector2(200, 40);
@@ -69,10 +71,9 @@ namespace Test
             });
 
 
-            Border.AddChild(Frame);
             Frame.AddChild(Label);
 
-            GUIManager.Root.AddChild(Border);
+            GUIManager.Root.AddChild(Frame);
             GUIManager.Root.AddChild(TextBox);
             GUIManager.Root.AddChild(Slider);
             GUIManager.Root.AddChild(sldrLbl);
