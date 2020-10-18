@@ -7,6 +7,6 @@ namespace OpenTKGUI.Shaders
 {
     internal class ColoredShader : Shader
     {
-        public ColoredShader() : base("Shaders/Colored.vert", "Shaders/Default.frag") { }
+        public ColoredShader() : base("Shaders/OpenTKGUIColored.vert", "Shaders/OpenTKGUIDefault.frag") { }
     }
 }

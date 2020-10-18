@@ -7,6 +7,6 @@ namespace OpenTKGUI.Shaders
 {
     internal class TexturedShader : Shader
     {
-        public TexturedShader() : base("Shaders/Textured.vert", "Shaders/Textured.frag") { }
+        public TexturedShader() : base("Shaders/OpenTKGUITextured.vert", "Shaders/OpenTKGUITextured.frag") { }
     }
 }

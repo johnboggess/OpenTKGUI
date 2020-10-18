@@ -7,6 +7,6 @@ namespace OpenTKGUI.Shaders
 {
     internal class DefaultShader : Shader
     {
-        public DefaultShader() : base("Shaders/Default.vert", "Shaders/Default.frag") { }
+        public DefaultShader() : base("Shaders/OpenTKGUIDefault.vert", "Shaders/OpenTKGUIDefault.frag") { }
     }
 }

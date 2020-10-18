@@ -17,25 +17,25 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Shaders\Colored.vert">
+    <None Update="Shaders\OpenTKGUIColored.vert">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Shaders\Default.frag">
+    <None Update="Shaders\OpenTKGUIDefault.frag">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Shaders\Default.vert">
+    <None Update="Shaders\OpenTKGUIDefault.vert">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Shaders\Font.frag">
+    <None Update="Shaders\OpenTKGUIFont.frag">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Shaders\Font.vert">
+    <None Update="Shaders\OpenTKGUIFont.vert">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Shaders\Textured.frag">
+    <None Update="Shaders\OpenTKGUITextured.frag">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Shaders\Textured.vert">
+    <None Update="Shaders\OpenTKGUITextured.vert">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

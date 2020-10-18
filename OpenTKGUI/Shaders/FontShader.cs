@@ -7,6 +7,6 @@ namespace OpenTKGUI.Shaders
 {
     internal class FontShader : Shader
     {
-        public FontShader() : base("Shaders/Font.vert", "Shaders/Font.frag") { }
+        public FontShader() : base("Shaders/OpenTKGUIFont.vert", "Shaders/OpenTKGUIFont.frag") { }
     }
 }
