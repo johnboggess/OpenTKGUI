@@ -12,12 +12,23 @@ namespace OpenTKGUI
 {
     internal class TextureData
     {
+        public int Width { get { return _width; } }
+        public int Height { get { return _height; } }
+
         int _handle;
         private bool _disposed = false;
+        private int _width;
+        private int _height;
 
-        public TextureData(string filePath, FlipMode flipMode = FlipMode.Vertical)
+        private static Dictionary<string, TextureData> _loadedTextures = new Dictionary<string, TextureData>();
+
+        public static TextureData LoadTextureData(string filePath, FlipMode flipMode = FlipMode.Vertical)
         {
-            _handle = GL.GenTexture();
+            if (_loadedTextures.ContainsKey(filePath))
+                return _loadedTextures[filePath];
+
+            TextureData textureData = new TextureData();
+            textureData._handle = GL.GenTexture();
 
             SixLabors.ImageSharp.Image<Rgba32> image = SixLabors.ImageSharp.Image.Load<Rgba32>(filePath);
             image.Mutate(x => x.Flip(flipMode));
@@ -34,9 +45,16 @@ namespace OpenTKGUI
                 }
             }
 
-            GL.BindTexture(TextureTarget.Texture2D, _handle);
+            textureData._width = image.Width;
+            textureData._height = image.Height;
+
+            GL.BindTexture(TextureTarget.Texture2D, textureData._handle);
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.SrgbAlpha, image.Width, image.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, pixels.ToArray());
-            UnBind();
+            textureData.UnBind();
+
+            _loadedTextures.Add(filePath, textureData);
+
+            return textureData;
         }
 
         public Texture CreateTexture(TextureUnit textureUnit)

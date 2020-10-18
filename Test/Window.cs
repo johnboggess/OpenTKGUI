@@ -25,6 +25,7 @@ namespace Test
         TextBox TextBox;
         Slider Slider;
         Label sldrLbl;
+        OpenTKGUI.GUIElements.Image img;
         public Window(GameWindowSettings gws, NativeWindowSettings nws) : base (gws, nws)
         {
         }
@@ -57,6 +58,8 @@ namespace Test
             sldrLbl.Size = new Vector2(200, 40);
             sldrLbl.LocalPosition = new Vector2(0, 140);
 
+            img = new OpenTKGUI.GUIElements.Image("Fonts\\Arial32_0.png");
+            img.LocalPosition = new Vector2(400, 32);
 
             Frame.OnMouseButton = new Func<MouseButtonEventArgs, bool>((a) =>
             {
@@ -73,6 +76,7 @@ namespace Test
             GUIManager.Root.AddChild(TextBox);
             GUIManager.Root.AddChild(Slider);
             GUIManager.Root.AddChild(sldrLbl);
+            GUIManager.Root.AddChild(img);
 
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.FramebufferSrgb);

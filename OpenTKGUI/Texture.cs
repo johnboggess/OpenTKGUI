@@ -45,6 +45,9 @@ namespace OpenTKGUI
             }
         }
 
+        public int Width { get { return _textureData.Width; } }
+        public int Height { get { return _textureData.Height; } }
+
         TextureWrapMode _wrapMode = TextureWrapMode.Repeat;
         TextureMinFilter _textureMinFilter = TextureMinFilter.Linear;
         TextureMagFilter _textureMagFilter = TextureMagFilter.Linear;

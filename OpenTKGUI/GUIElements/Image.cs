@@ -16,8 +16,9 @@ namespace OpenTKGUI.GUIElements
 
         public Image(string imageFilePath)
         {
-            _TextureData = new TextureData(imageFilePath);
+            _TextureData = TextureData.LoadTextureData(imageFilePath);
             _Texture = _TextureData.CreateTexture(TextureUnit.Texture0);
+            Size = new Vector2(_Texture.Width, _Texture.Height);
         }
 
         public override void Draw(Vector2 parentGlobalPosition, int depth)

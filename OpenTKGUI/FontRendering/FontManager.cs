@@ -43,7 +43,7 @@ namespace OpenTKGUI.FontRendering
             Font font = new Font();
 
             XElement page = xDocument.Descendants(XName.Get("page")).FirstOrDefault();
-            font._FontBitmapData = new TextureData(fontFolder + "\\" + page.Attribute(XName.Get("file")).Value);
+            font._FontBitmapData = TextureData.LoadTextureData(fontFolder + "\\" + page.Attribute(XName.Get("file")).Value);
             font._FontBitmap = font._FontBitmapData.CreateTexture(TextureUnit.Texture0);
             font._FontBitmap.TextureMagFilter = TextureMagFilter.Nearest;
             font._FontBitmap.TextureMinFilter = TextureMinFilter.Nearest;
