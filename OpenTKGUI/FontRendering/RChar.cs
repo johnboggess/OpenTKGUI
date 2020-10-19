@@ -30,13 +30,13 @@ namespace OpenTKGUI.FontRendering
 
         public override void Draw(Vector2 parentGlobalPosition, int depth)
         {
-            GUIManager._FontShader.Use();
+            Shader.FontShader.Use();
 
-            Font._FontBitmap.Bind(GUIManager._FontShader, "tex");
-            GUIManager._FontShader.SetUniform4("TextColor", Color);
-            GUIManager._FontShader.SetUniformMatrix("globalGUITransform", false, GUIManager._Transform);
-            GUIManager._FontShader.SetUniformMatrix("elementTransform", false, Transform * Matrix4.CreateTranslation(new Vector3(parentGlobalPosition.X, parentGlobalPosition.Y, depth)));
-            GUIManager._FontShader.SetUniform1("uvs", FontCharacter.UVRegion());
+            Font._FontBitmap.Bind(Shader.FontShader, "tex");
+            Shader.FontShader.SetUniform4("TextColor", Color);
+            Shader.FontShader.SetUniformMatrix("globalGUITransform", false, GUIManager._Transform);
+            Shader.FontShader.SetUniformMatrix("elementTransform", false, Transform * Matrix4.CreateTranslation(new Vector3(parentGlobalPosition.X, parentGlobalPosition.Y, depth)));
+            Shader.FontShader.SetUniform1("uvs", FontCharacter.UVRegion());
 
             VertexArray.Square.Draw();
 

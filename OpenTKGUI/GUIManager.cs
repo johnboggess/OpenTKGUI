@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Reflection;
 
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.Common;
@@ -18,21 +19,15 @@ namespace OpenTKGUI
         public static GUIElement Root;
         public static GUIElement FocusedElement = null;
 
-        internal static Shader _DefaultShader;
-        internal static Shader _ColoredShader;
-        internal static Shader _TexturedShader;
-        internal static Shader _FontShader;
         internal static Matrix4 _Transform;
 
         private static int farClipping = 10000;
         public static void Init(GameWindow gameWindow)
         {
+            Shader.LoadShaders();
+
             GameWindow = gameWindow;
             Root = new GUIElement();
-            _DefaultShader = new DefaultShader();
-            _ColoredShader = new ColoredShader();
-            _TexturedShader = new TexturedShader();
-            _FontShader = new FontShader();
 
             _Transform = Matrix4.Identity;
             _Transform.M41 = -1;

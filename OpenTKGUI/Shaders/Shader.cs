@@ -5,14 +5,19 @@ using System.IO;
 
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
+using System.Reflection;
 
 namespace OpenTKGUI.Shaders
 {
     internal class Shader
     {
+        public static Shader DefaultShader;
+        public static Shader ColoredShader;
+        public static Shader FontShader;
+        public static Shader TexturedShader;
+
         public string VertexShaderName { get { return _vertexShaderName; } }
         public string FragmentShaderName { get { return _fragmentShaderName; } }
-
 
         int _handle;
         public string _vertexShaderName;
@@ -20,44 +25,53 @@ namespace OpenTKGUI.Shaders
 
         private bool _disposed = false;
 
+        public static void LoadShaders()
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+
+            Stream vertex = assembly.GetManifestResourceStream("OpenTKGUI.Shaders.OpenTKGUIDefault.vert");
+            Stream frag = assembly.GetManifestResourceStream("OpenTKGUI.Shaders.OpenTKGUIDefault.frag");
+            DefaultShader = _loadShader(vertex, "DefaultVertex", frag, "DefaultFrag");
+
+            vertex = assembly.GetManifestResourceStream("OpenTKGUI.Shaders.OpenTKGUIColored.vert");
+            frag = assembly.GetManifestResourceStream("OpenTKGUI.Shaders.OpenTKGUIDefault.frag");
+            ColoredShader = _loadShader(vertex, "ColoredVertex", frag, "DefaultFrag");
+
+            vertex = assembly.GetManifestResourceStream("OpenTKGUI.Shaders.OpenTKGUIFont.vert");
+            frag = assembly.GetManifestResourceStream("OpenTKGUI.Shaders.OpenTKGUIFont.frag");
+            FontShader = _loadShader(vertex, "FontVertex", frag, "FontFrag");
+
+            vertex = assembly.GetManifestResourceStream("OpenTKGUI.Shaders.OpenTKGUITextured.vert");
+            frag = assembly.GetManifestResourceStream("OpenTKGUI.Shaders.OpenTKGUITextured.frag");
+            TexturedShader = _loadShader(vertex, "TexturedVertex", frag, "TexturedFrag");
+
+        }
+
+        private static Shader _loadShader(Stream vertex, string vertexName, Stream frag, string fragName)
+        {
+            StreamReader reader = new StreamReader(vertex);
+            string vertexSource = reader.ReadToEnd();
+
+            reader = new StreamReader(frag);
+            string fragSource = reader.ReadToEnd();
+
+            return new Shader(vertexSource, vertexName, fragSource, fragName);
+        }
+
         public Shader(string vertexPath, string fragmentPath)
         {
-            //Read source code from file
-            int vertexHandle;
             string vertexSource = File.ReadAllText(vertexPath);
-            _vertexShaderName = vertexPath.Substring(vertexPath.LastIndexOf("/") + 1, vertexPath.Length - vertexPath.LastIndexOf("/") - 1);
+            string vertexShaderName = vertexPath.Substring(vertexPath.LastIndexOf("/") + 1, vertexPath.Length - vertexPath.LastIndexOf("/") - 1);
 
-            int fragHandle;
             string fragSource = File.ReadAllText(fragmentPath);
-            _fragmentShaderName = fragmentPath.Substring(fragmentPath.LastIndexOf("/") + 1, fragmentPath.Length - fragmentPath.LastIndexOf("/") - 1);
+            string fragmentShaderName = fragmentPath.Substring(fragmentPath.LastIndexOf("/") + 1, fragmentPath.Length - fragmentPath.LastIndexOf("/") - 1);
 
-            ///Create shader and bind the source code to it
-            vertexHandle = GL.CreateShader(ShaderType.VertexShader);
-            GL.ShaderSource(vertexHandle, vertexSource);
+            _setUp(vertexSource, vertexShaderName, fragSource, fragmentShaderName);
+        }
 
-            fragHandle = GL.CreateShader(ShaderType.FragmentShader);
-            GL.ShaderSource(fragHandle, fragSource);
-
-            //Compile the shaders and display any log information
-            GL.CompileShader(vertexHandle);
-            string log = GL.GetShaderInfoLog(vertexHandle);
-            if (log != System.String.Empty) { System.Console.WriteLine("Vertex Shader:\n" + log); }
-
-            GL.CompileShader(fragHandle);
-            log = GL.GetShaderInfoLog(fragHandle);
-            if (log != System.String.Empty) { System.Console.WriteLine("Fragment Shader:\n" + log); }
-
-            //Create the shader program and link the vertex and frag shaders
-            _handle = GL.CreateProgram();
-            GL.AttachShader(_handle, vertexHandle);
-            GL.AttachShader(_handle, fragHandle);
-            GL.LinkProgram(_handle);
-
-            //clean up
-            GL.DetachShader(_handle, vertexHandle);
-            GL.DetachShader(_handle, fragHandle);
-            GL.DeleteShader(vertexHandle);
-            GL.DeleteShader(fragHandle);
+        public Shader(string vertexSource, string vertexName, string fragSource, string fragName)
+        {
+            _setUp(vertexSource, vertexName, fragSource, fragName);
         }
 
         public virtual void Use(params object[] values)
@@ -181,6 +195,39 @@ namespace OpenTKGUI.Shaders
         internal void _Use()
         {
             GL.UseProgram(_handle);
+        }
+
+        private void _setUp(string vertexSource, string vertexName, string fragSource, string fragName)
+        {
+            _vertexShaderName = vertexName;
+            _fragmentShaderName = fragName;
+
+            int vertexHandle;
+            int fragHandle;
+
+            vertexHandle = GL.CreateShader(ShaderType.VertexShader);
+            GL.ShaderSource(vertexHandle, vertexSource);
+
+            fragHandle = GL.CreateShader(ShaderType.FragmentShader);
+            GL.ShaderSource(fragHandle, fragSource);
+
+            GL.CompileShader(vertexHandle);
+            string log = GL.GetShaderInfoLog(vertexHandle);
+            if (log != System.String.Empty) { System.Console.WriteLine("Vertex Shader:\n" + log); }
+
+            GL.CompileShader(fragHandle);
+            log = GL.GetShaderInfoLog(fragHandle);
+            if (log != System.String.Empty) { System.Console.WriteLine("Fragment Shader:\n" + log); }
+
+            _handle = GL.CreateProgram();
+            GL.AttachShader(_handle, vertexHandle);
+            GL.AttachShader(_handle, fragHandle);
+            GL.LinkProgram(_handle);
+
+            GL.DetachShader(_handle, vertexHandle);
+            GL.DetachShader(_handle, fragHandle);
+            GL.DeleteShader(vertexHandle);
+            GL.DeleteShader(fragHandle);
         }
     }
 }

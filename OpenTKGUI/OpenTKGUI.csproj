@@ -1,10 +1,36 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Platforms>AnyCPU;x64;x86</Platforms>
+    <Version>0.0.2</Version>
+    <Authors>John Boggess</Authors>
+    <Company>John Boggess</Company>
+    <Description>Simple GUI from OpenTK 4</Description>
+    <PackageId>OpenTKGUI-JB</PackageId>
+    <PackageReleaseNotes>Added shader files</PackageReleaseNotes>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Shaders\OpenTKGUIColored.vert" />
+    <None Remove="Shaders\OpenTKGUIDefault.frag" />
+    <None Remove="Shaders\OpenTKGUIDefault.vert" />
+    <None Remove="Shaders\OpenTKGUIFont.frag" />
+    <None Remove="Shaders\OpenTKGUIFont.vert" />
+    <None Remove="Shaders\OpenTKGUITextured.frag" />
+    <None Remove="Shaders\OpenTKGUITextured.vert" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Shaders\OpenTKGUIColored.vert" />
+    <EmbeddedResource Include="Shaders\OpenTKGUIDefault.frag" />
+    <EmbeddedResource Include="Shaders\OpenTKGUIDefault.vert" />
+    <EmbeddedResource Include="Shaders\OpenTKGUIFont.frag" />
+    <EmbeddedResource Include="Shaders\OpenTKGUIFont.vert" />
+    <EmbeddedResource Include="Shaders\OpenTKGUITextured.frag" />
+    <EmbeddedResource Include="Shaders\OpenTKGUITextured.vert" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="OpenTK" Version="4.0.6" />
@@ -14,30 +40,6 @@
   <ItemGroup>
     <Folder Include="FontRendering\" />
     <Folder Include="Buffers\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="Shaders\OpenTKGUIColored.vert">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Shaders\OpenTKGUIDefault.frag">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Shaders\OpenTKGUIDefault.vert">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Shaders\OpenTKGUIFont.frag">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Shaders\OpenTKGUIFont.vert">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Shaders\OpenTKGUITextured.frag">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Shaders\OpenTKGUITextured.vert">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

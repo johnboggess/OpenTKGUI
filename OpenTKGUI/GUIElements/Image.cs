@@ -6,6 +6,7 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 
 using OpenTKGUI.Buffers;
+using OpenTKGUI.Shaders;
 
 namespace OpenTKGUI.GUIElements
 {
@@ -23,11 +24,11 @@ namespace OpenTKGUI.GUIElements
 
         public override void Draw(Vector2 parentGlobalPosition, int depth)
         {
-            GUIManager._TexturedShader.Use();
+            Shader.TexturedShader.Use();
 
-            _Texture.Bind(GUIManager._TexturedShader, "tex");
-            GUIManager._TexturedShader.SetUniformMatrix("globalGUITransform", false, GUIManager._Transform);
-            GUIManager._TexturedShader.SetUniformMatrix("elementTransform", false, Transform * Matrix4.CreateTranslation(new Vector3(parentGlobalPosition.X, parentGlobalPosition.Y, depth)));
+            _Texture.Bind(Shader.TexturedShader, "tex");
+            Shader.TexturedShader.SetUniformMatrix("globalGUITransform", false, GUIManager._Transform);
+            Shader.TexturedShader.SetUniformMatrix("elementTransform", false, Transform * Matrix4.CreateTranslation(new Vector3(parentGlobalPosition.X, parentGlobalPosition.Y, depth)));
 
             VertexArray.Square.Draw();
 
