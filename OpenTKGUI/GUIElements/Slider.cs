@@ -53,7 +53,14 @@ namespace OpenTKGUI.GUIElements
         public float Value
         {
             get { return _value; }
-            set { _value = value; _SizeChanged(); }
+            set 
+            {
+                float old = _value;
+                _value = value;
+                _SizeChanged();
+                if (OnValueChanged != null)
+                    OnValueChanged(old, _value);
+            }
         }
 
         public Color4 BorderColor { get { return _Background.BorderColor; } set { _Background.BorderColor = value; } }
@@ -90,7 +97,6 @@ namespace OpenTKGUI.GUIElements
                     float dValue = (_maxValue - _minValue) / (_Track.Size.X);
                     float old = Value;
                     Value = MathF.Max(MathF.Min(_value + (a.DeltaX * dValue), _maxValue), _minValue);
-                    OnValueChanged.Invoke(old, Value);
                 }
             });
 

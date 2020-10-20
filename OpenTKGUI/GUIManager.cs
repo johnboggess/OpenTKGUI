@@ -20,6 +20,8 @@ namespace OpenTKGUI
         public static GUIElement FocusedElement = null;
 
         internal static Matrix4 _Transform;
+        internal static List<GUIElement> _QueuedForRemoval = new List<GUIElement>();
+        internal static List<Tuple<GUIElement, GUIElement>> _QueuedToAdd = new List<Tuple<GUIElement, GUIElement>>();
 
         private static int farClipping = 10000;
         public static void Init(GameWindow gameWindow)
@@ -45,6 +47,20 @@ namespace OpenTKGUI
 
         public static void Draw(Vector2 offset)
         {
+            foreach(GUIElement removed in _QueuedForRemoval)
+            {
+                removed.Parent._Children.Remove(removed);
+                removed._Parent = null;
+            }
+            foreach(Tuple<GUIElement, GUIElement> pair in _QueuedToAdd)
+            {
+                pair.Item2._Parent = pair.Item1;
+                pair.Item1._Children.Add(pair.Item2);
+            }
+
+            _QueuedForRemoval.Clear();
+            _QueuedToAdd.Clear();
+
             Root.Draw(offset, -farClipping);
         }
 
@@ -53,6 +69,20 @@ namespace OpenTKGUI
         {
             Vector2 result = new Vector2(GameWindow.MousePosition.X, GameWindow.Size.Y - GameWindow.MousePosition.Y);
             return result;
+        }
+
+        internal static void _QueueElementForRemoval(GUIElement elementToRemove)
+        {
+            if (elementToRemove.Parent == null)
+                return;
+            _QueuedForRemoval.Add(elementToRemove);
+        }
+
+        internal static void _QueueElementToBeAdded(GUIElement parent, GUIElement elementToAdd)
+        {
+            if (elementToAdd.Parent != null)
+                elementToAdd.Remove();
+            _QueuedToAdd.Add(Tuple.Create(parent, elementToAdd));
         }
 
         private static void _setUpEvents()

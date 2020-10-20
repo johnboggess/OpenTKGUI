@@ -22,8 +22,7 @@ namespace OpenTKGUI.GUIElements
         public Action<TextInputEventArgs> OnTextInput;
 
         internal GUIElement _Parent;
-
-        private List<GUIElement> _children = new List<GUIElement>();
+        internal List<GUIElement> _Children = new List<GUIElement>();
 
         public Vector2 LocalPosition
         {
@@ -69,8 +68,12 @@ namespace OpenTKGUI.GUIElements
 
         public void AddChild(GUIElement element)
         {
-            element._Parent = this;
-            _children.Add(element);
+            GUIManager._QueueElementToBeAdded(this, element);
+        }
+
+        public void Remove()
+        {
+            GUIManager._QueueElementForRemoval(this);
         }
 
         public bool HasParent()
@@ -86,12 +89,6 @@ namespace OpenTKGUI.GUIElements
         public bool IsRoot()
         {
             return this == GUIManager.Root;
-        }
-
-        public void RemoveChild(GUIElement element)
-        {
-            element._Parent = null;
-            _children.Remove(element);
         }
 
         public bool IsPointInside(Vector2 point)
@@ -119,7 +116,7 @@ namespace OpenTKGUI.GUIElements
                         return;
                 }
             }
-            foreach (GUIElement child in _children)
+            foreach (GUIElement child in _Children)
                 child._MouseButtonEvent(args);
         }
 
@@ -127,7 +124,7 @@ namespace OpenTKGUI.GUIElements
         {
             if (OnGlobalMouseButton != null)
                 OnGlobalMouseButton.Invoke(args);
-            foreach (GUIElement child in _children)
+            foreach (GUIElement child in _Children)
                 child._GlobalMouseButtonEvent(args);
         }
 
@@ -135,7 +132,7 @@ namespace OpenTKGUI.GUIElements
         {
             if (OnGlobalMouseMove != null)
                 OnGlobalMouseMove.Invoke(args);
-            foreach (GUIElement child in _children)
+            foreach (GUIElement child in _Children)
                 child._GlobalMouseMoveEvent(args);
         }
 
@@ -144,7 +141,7 @@ namespace OpenTKGUI.GUIElements
 
         protected void draw(Vector2 parentGlobalPosition, int depth)
         {
-            foreach (GUIElement child in _children)
+            foreach (GUIElement child in _Children)
                 child.Draw(parentGlobalPosition+LocalPosition, depth+1);
         }
     }

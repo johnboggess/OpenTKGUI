@@ -4,12 +4,12 @@
     <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Platforms>AnyCPU;x64;x86</Platforms>
-    <Version>0.0.2</Version>
+    <Version>0.0.5</Version>
     <Authors>John Boggess</Authors>
     <Company>John Boggess</Company>
-    <Description>Simple GUI from OpenTK 4</Description>
+    <Description>Simple GUI for OpenTK 4</Description>
     <PackageId>OpenTKGUI-JB</PackageId>
-    <PackageReleaseNotes>Added shader files</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed crash when attempting to remove/add gui elements during the draw/event calls</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
