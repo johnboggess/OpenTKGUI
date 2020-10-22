@@ -8,13 +8,17 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 
 using OpenTKGUI.FontRendering;
 using OpenTKGUI.Buffers;
+using OpenTKGUI.Enums;
 
 namespace OpenTKGUI.GUIElements
 {
-    public class TextBox : GUIElement
+    public class TextBox : GUIControl
     {
-        public string Text 
-        { 
+        public float MinWidth = 0;
+        public float MinHeight = 0;
+
+        public string Text
+        {
             get { return _lbl.Text; }
             set { _lbl.Text = value; }
         }
@@ -26,8 +30,6 @@ namespace OpenTKGUI.GUIElements
         }
 
         public Color4 BackgroundColor { get { return _frame.Color; } set { _frame.Color = value; } }
-        public Color4 BorderColor { get { return _frame.BorderColor; } set { _frame.BorderColor = value; } }
-        public float BorderSize { get { return _frame.BorderSize; } set { _frame.BorderSize = value; } }
 
         Frame _frame;
         Label _lbl;
@@ -37,6 +39,9 @@ namespace OpenTKGUI.GUIElements
             Focusable = true;
 
             _frame = new Frame();
+            _frame.HorizontalAlignment = Enums.HorizontalAlignment.Stretch;
+            _frame.VerticalAlignment = Enums.VerticalAlignment.Stretch;
+
             _lbl = new Label("", font);
 
             OnTextInput = new Action<TextInputEventArgs>((a) =>
@@ -47,21 +52,37 @@ namespace OpenTKGUI.GUIElements
             OnKeyDown = new Action<KeyboardKeyEventArgs>((a) =>
             {
                 if (a.Key == Keys.Backspace && Text.Length > 0)
-                    Text = Text.Substring(0, Text.Length-1);
+                    Text = Text.Substring(0, Text.Length - 1);
             });
         }
 
         public override void Draw(Vector2 parentGlobalPosition, int depth)
         {
-            _frame.Draw(parentGlobalPosition + LocalPosition, depth + 2);
-            _lbl.Draw(parentGlobalPosition + LocalPosition, depth + 2);
+            _frame.Draw(parentGlobalPosition + _LocalPosition, depth + 2);
+            _lbl.Draw(parentGlobalPosition + _LocalPosition, depth + 2);
 
             base.Draw(parentGlobalPosition, depth);
         }
 
-        internal override void _SizeChanged()
+        internal override void _CalculateChildSize()
         {
-            _frame.Size = Size;
+            _lbl.Size = Size;
+            applyAuto(_lbl);
+            _lbl._CalculateChildSize();
+            applyChildStretch(_frame);
+        }
+
+        protected override void applyAuto(GUIElement childToWrap)
+        {
+            if (HorizontalAlignment != HorizontalAlignment.Stretch && Size.X < 0)
+            {
+                RenderSize = new Vector2(MathF.Max(childToWrap.RenderSize.X + BorderSize * 2f, MinWidth), RenderSize.Y);
+            }
+
+            if (VerticalAlignment != VerticalAlignment.Stretch && Size.Y < 0)
+            {
+                RenderSize = new Vector2(RenderSize.X, MathF.Max(childToWrap.RenderSize.Y + BorderSize * 2f, MinHeight));
+            }
         }
     }
 }

@@ -2,36 +2,39 @@
 using System.Collections.Generic;
 using System.Text;
 
-using OpenTK.Windowing.Desktop;
-using OpenTK.Mathematics;
 using OpenTKGUI.Shaders;
 using OpenTKGUI.Buffers;
 
+using OpenTK.Mathematics;
+
 namespace OpenTKGUI.GUIElements
 {
-    public class Frame : GUIElement
+    public class Frame : GUIContainer
     {
-        public Color4 Color = Color4.White;
-        public Color4 BorderColor = Color4.Black;
-        public float BorderSize = 0;
+        public override void AddChild(GUIElement element, params object[] args)
+        {
+            if (_Children.Count > 0)
+                throw new Exception("Frame can only have one child");
+            base.AddChild(element);
+        }
 
         public override void Draw(Vector2 parentGlobalPosition, int depth)
         {
             Shader.ColoredShader.Use();
 
-            Vector2 oldPos = LocalPosition;
-            Vector2 oldSize = Size;
+            Vector2 oldPos = _LocalPosition;
+            Vector2 oldSize = RenderSize;
 
-            Size -= new Vector2(BorderSize * 2f, BorderSize * 2f);
-            LocalPosition += new Vector2(BorderSize, BorderSize);
+            RenderSize -= new Vector2(BorderSize * 2f, BorderSize * 2f);
+            _LocalPosition += new Vector2(BorderSize, BorderSize);
             Shader.ColoredShader.SetUniform4("Color", Color);
             Shader.ColoredShader.SetUniformMatrix("globalGUITransform", false, GUIManager._Transform);
             Shader.ColoredShader.SetUniformMatrix("elementTransform", false, Transform * Matrix4.CreateTranslation(new Vector3(parentGlobalPosition.X, parentGlobalPosition.Y, depth)));
 
             VertexArray.Square.Draw();
 
-            Size = oldSize;
-            LocalPosition = oldPos;
+            RenderSize = oldSize;
+            _LocalPosition = oldPos;
             Shader.ColoredShader.SetUniform4("Color", BorderColor);
             Shader.ColoredShader.SetUniformMatrix("globalGUITransform", false, GUIManager._Transform);
             Shader.ColoredShader.SetUniformMatrix("elementTransform", false, Transform * Matrix4.CreateTranslation(new Vector3(parentGlobalPosition.X, parentGlobalPosition.Y, depth)));
@@ -40,6 +43,5 @@ namespace OpenTKGUI.GUIElements
 
             base.Draw(parentGlobalPosition, depth);
         }
-
     }
 }

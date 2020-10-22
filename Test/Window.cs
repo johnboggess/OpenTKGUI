@@ -19,12 +19,12 @@ namespace Test
 {
     class Window : GameWindow
     {
-        Label Label;
+        //Label Label;
         Frame Frame;
-        TextBox TextBox;
-        Slider Slider;
-        Label sldrLbl;
-        OpenTKGUI.GUIElements.Image img;
+        //TextBox TextBox;
+        //Slider Slider;
+        //Label sldrLbl;
+        //OpenTKGUI.GUIElements.Image img;
         public Window(GameWindowSettings gws, NativeWindowSettings nws) : base (gws, nws)
         {
         }
@@ -36,7 +36,38 @@ namespace Test
             GUIManager.Init(this);
             FontManager.Init("Fonts");
 
-            Label = new Label("The quick brown fox jumps over the lazy dog WA fj", FontManager.GetFont("Arial", 32)) { LocalPosition = new Vector2(5, 2) };
+            Frame = new Frame();
+            Frame.Size = new Vector2(300, 100);
+            Frame.BorderSize = 2;
+            Frame.BorderColor = Color4.Black;
+            Frame.Color = Color4.LightGray;
+            Frame.HorizontalAlignment = OpenTKGUI.Enums.HorizontalAlignment.Left;
+            Frame.VerticalAlignment = OpenTKGUI.Enums.VerticalAlignment.Top;
+            GUIManager.Root.AddChild(Frame);
+
+            Frame frame = new Frame();
+            frame.Color = Color4.Purple;
+            frame.Size = new Vector2(-1, -1);
+            frame.HorizontalAlignment = OpenTKGUI.Enums.HorizontalAlignment.Center;
+            frame.VerticalAlignment = OpenTKGUI.Enums.VerticalAlignment.Center;
+            frame.BorderSize = 1;
+            frame.BorderColor = Color.Red;
+
+            OpenTKGUI.GUIElements.Image image = new OpenTKGUI.GUIElements.Image("Fonts\\Arial32_0.png");
+
+            Label label = new Label("The quick brown fox jumps over the lazy dog WA fj", FontManager.GetFont("Arial", 32));
+            label.Size = new Vector2(-1, -1);
+
+            TextBox textBox = new TextBox(FontManager.GetFont("Arial", 32));
+            textBox.MinWidth = 32;
+            textBox.Size = new Vector2(-1, 32);
+
+            Slider slider = new Slider();
+            slider.Size = new Vector2(100, 32);
+            
+            Frame.AddChild(slider);
+
+            /*Label = new Label("The quick brown fox jumps over the lazy dog WA fj", FontManager.GetFont("Arial", 32)) { LocalPosition = new Vector2(5, 2) };
             Frame = new Frame();
             Frame.LocalPosition = new Vector2(Size.X / 2f - Label.Size.X / 2f, Size.Y/2f);
             Frame.Size = new Vector2(Label.Size.X + 10, Label.Size.Y);
@@ -77,7 +108,7 @@ namespace Test
             GUIManager.Root.AddChild(TextBox);
             GUIManager.Root.AddChild(Slider);
             GUIManager.Root.AddChild(sldrLbl);
-            GUIManager.Root.AddChild(img);
+            GUIManager.Root.AddChild(img);*/
 
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.FramebufferSrgb);

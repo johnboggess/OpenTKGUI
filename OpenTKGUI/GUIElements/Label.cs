@@ -5,22 +5,24 @@ using System.Collections.Generic;
 using System.Text;
 
 using OpenTKGUI.FontRendering;
+using OpenTKGUI.Enums;
 using OpenTKGUI.Buffers;
 using OpenTKGUI.Shaders;
+using System.Runtime.CompilerServices;
 
 namespace OpenTKGUI.GUIElements
 {
-    public class Label : GUIElement
+    public class Label : GUIControl
     {
-        public string Text 
-        { 
-            get { return _text; } 
-            set { _text = value; _RString = RString.Create(_text, _font); _matchTextSize(); }
+        public string Text
+        {
+            get { return _text; }
+            set { _text = value; _RString = RString.Create(_text, _font); _RString.SetTextColor(_textColor) ; _matchTextSize(); }
         }
         public Font Font
         {
             get { return _font; }
-            set { _font = value; _RString = RString.Create(_text, _font); _matchTextSize(); }
+            set { _font = value; _RString = RString.Create(_text, _font); _RString.SetTextColor(_textColor); _matchTextSize(); }
         }
         public Color4 TextColor
         {
@@ -52,9 +54,22 @@ namespace OpenTKGUI.GUIElements
 
             VertexArray.Square.Draw();
 
-            _RString.Draw(parentGlobalPosition + LocalPosition, depth + 1);
+            _RString.Draw(parentGlobalPosition + _LocalPosition, depth + 1);
 
             base.Draw(parentGlobalPosition, depth);
+        }
+
+        internal override void _CalculateChildSize()
+        {
+            if (HorizontalAlignment != HorizontalAlignment.Stretch && Size.X < 0)
+            {
+                RenderSize = new Vector2(_RString.GetWidth(), RenderSize.Y);
+            }
+
+            if (VerticalAlignment != VerticalAlignment.Stretch && Size.Y < 0)
+            {
+                RenderSize = new Vector2(RenderSize.X, Font.LineHeight);
+            }
         }
 
         private void _matchTextSize()

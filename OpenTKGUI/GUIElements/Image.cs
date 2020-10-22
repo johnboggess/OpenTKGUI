@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 
+using OpenTKGUI;
+using OpenTKGUI.Shaders;
+using OpenTKGUI.Buffers;
+
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
-
-using OpenTKGUI.Buffers;
-using OpenTKGUI.Shaders;
-
 namespace OpenTKGUI.GUIElements
 {
-    public class Image : GUIElement
+    public class Image : GUIControl
     {
         internal TextureData _TextureData;
         internal Texture _Texture;

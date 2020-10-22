@@ -36,7 +36,7 @@ namespace OpenTKGUI.FontRendering
             {
                 int xoffset = cursorX + _chars[i].XOffest;
 
-                _chars[i].LocalPosition += new Vector2(xoffset, 0);
+                _chars[i]._LocalPosition += new Vector2(xoffset, 0);
 
                 cursorX += _chars[i].XAdvance;
                 if (i < chars.Count - 1)
@@ -45,7 +45,7 @@ namespace OpenTKGUI.FontRendering
                 int yoffset = chars[i].Font.LineHeight - chars[i].Height;
                 yoffset -= chars[i].YOffset;
 
-                _chars[i].LocalPosition += new Vector2(0, yoffset);
+                _chars[i]._LocalPosition += new Vector2(0, yoffset);
             }
         }
 

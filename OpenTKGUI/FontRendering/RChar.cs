@@ -12,7 +12,6 @@ namespace OpenTKGUI.FontRendering
     internal class RChar : GUIElement
     {
         public Font.Character FontCharacter;
-        public Color4 Color = Color4.Black;
 
         public Font Font { get { return FontCharacter.Font; } }
         public char Char { get { return FontCharacter.Char; } }
@@ -25,7 +24,7 @@ namespace OpenTKGUI.FontRendering
         public RChar(char c, Font font)
         {
             FontCharacter = font.Characters[c];
-            Size = new Vector2(FontCharacter.Width, FontCharacter.Height);
+            RenderSize = new Vector2(FontCharacter.Width, FontCharacter.Height);
         }
 
         public override void Draw(Vector2 parentGlobalPosition, int depth)

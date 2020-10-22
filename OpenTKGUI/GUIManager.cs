@@ -16,7 +16,7 @@ namespace OpenTKGUI
     public static class GUIManager
     {
         public static GameWindow GameWindow;
-        public static GUIElement Root;
+        public static Root Root;
         public static GUIElement FocusedElement = null;
 
         internal static Matrix4 _Transform;
@@ -29,7 +29,8 @@ namespace OpenTKGUI
             Shader.LoadShaders();
 
             GameWindow = gameWindow;
-            Root = new GUIElement();
+            Root = new Root();
+            Root.RenderSize = new Vector2(gameWindow.Size.X, gameWindow.Size.Y);
 
             _Transform = Matrix4.Identity;
             _Transform.M41 = -1;
@@ -61,9 +62,16 @@ namespace OpenTKGUI
             _QueuedForRemoval.Clear();
             _QueuedToAdd.Clear();
 
+            GUIManager.CalculatePositionsAndSizes();
+
             Root.Draw(offset, -farClipping);
         }
 
+        public static void CalculatePositionsAndSizes()
+        {
+            Root._CalculateChildSize();
+            Root._CalculateChildPosition();
+        }
 
         public static Vector2 GUIMousePosition()
         {
