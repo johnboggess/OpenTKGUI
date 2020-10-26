@@ -68,8 +68,9 @@ namespace Test
             slider.Size = new Vector2(100, 32);
 
             HorizontalGrid horizontalGrid = new HorizontalGrid();
-            horizontalGrid.HorizontalAlignment = OpenTKGUI.Enums.HorizontalAlignment.Stretch;
-            horizontalGrid.VerticalAlignment = OpenTKGUI.Enums.VerticalAlignment.Stretch;
+            horizontalGrid.Size = new Vector2(-1, 100);
+            horizontalGrid.HorizontalAlignment = OpenTKGUI.Enums.HorizontalAlignment.Left;
+            horizontalGrid.VerticalAlignment = OpenTKGUI.Enums.VerticalAlignment.Top;
             horizontalGrid.AddChild(frame, HorizontalGrid.Units.Ratio, 1);
             horizontalGrid.AddChild(textBox, HorizontalGrid.Units.Ratio, 2);
 

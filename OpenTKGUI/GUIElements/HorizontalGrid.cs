@@ -49,16 +49,22 @@ namespace OpenTKGUI.GUIElements
                 else if (column.Units == Units.Auto)
                     column._GUIElement.Size = new Vector2(-1, column._GUIElement.Size.Y);
                 else if (column.Units == Units.Ratio)
+                {
+                    column._GUIElement.Size = new Vector2(-1, column._GUIElement.Size.Y);
                     totalRatio += column.Width;
+                }
 
                 column._GUIElement._CalculateSize();
-                takenWidth += column._GUIElement.RenderSize.X;
 
                 Rectangle outerRect = column._GUIElement.OuterRect;
-                minX = MathF.Min(minX, outerRect.Left);
-                maxX = MathF.Max(maxX, outerRect.Right);
+
+                minX = MathF.Min(minX, outerRect.Left + takenWidth);
+                maxX = MathF.Max(maxX, outerRect.Right + takenWidth);
                 minY = MathF.Min(minY, outerRect.Bottom);
                 maxY = MathF.Max(maxY, outerRect.Top);
+
+                if (column.Units != Units.Ratio)
+                    takenWidth += column._GUIElement.RenderSize.X;
             }
 
             return new Rectangle(minX, minY, maxX - minX, maxY - minY);
