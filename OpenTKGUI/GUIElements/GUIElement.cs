@@ -7,6 +7,9 @@ using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.Common;
 using System.Drawing;
 using OpenTKGUI.Enums;
+using System.Linq.Expressions;
+using Microsoft.Win32.SafeHandles;
+using System.Xml.Serialization;
 
 namespace OpenTKGUI.GUIElements
 {
@@ -32,8 +35,13 @@ namespace OpenTKGUI.GUIElements
         public HorizontalAlignment HorizontalAlignment = HorizontalAlignment.Left;
         public VerticalAlignment VerticalAlignment = VerticalAlignment.Top;
 
+        public float MinWidth = 0;
+        public float MinHeight = 0;
+
         internal GUIElement _Parent;
         internal List<GUIElement> _Children = new List<GUIElement>();
+
+        protected bool notifyWhenDoneSizing = false;
 
         internal Vector2 _LocalPosition
         {
@@ -71,6 +79,7 @@ namespace OpenTKGUI.GUIElements
         {
             get { return new Rectangle(BorderSize, BorderSize, RenderSize.X - BorderSize*2f, RenderSize.Y - BorderSize*2f); }
         }
+        public Rectangle OuterRect { get { return new Rectangle(_LocalPosition, RenderSize); } }
 
         public GUIElement Parent
         {
@@ -117,7 +126,7 @@ namespace OpenTKGUI.GUIElements
 
         public virtual void Draw(Vector2 parentGlobalPosition, int depth)
         {
-            draw(parentGlobalPosition, depth);
+            _DrawChildren(parentGlobalPosition, depth);
         }
 
         internal void _MouseButtonEvent(MouseButtonEventArgs args)
@@ -152,100 +161,113 @@ namespace OpenTKGUI.GUIElements
                 child._GlobalMouseMoveEvent(args);
         }
 
-        protected void draw(Vector2 parentGlobalPosition, int depth)
+        protected virtual void _DrawChildren(Vector2 parentGlobalPosition, int depth)
         {
             foreach (GUIElement child in _Children)
                 child.Draw(parentGlobalPosition+_LocalPosition, depth+1);
         }
 
-        internal virtual void _CalculateChildSize()
+        internal virtual void _CalculateSize()
         {
-            foreach (GUIElement child in _Children)
-            {
-                applyChildStretch(child);
+            RenderSize = new Vector2(0, 0);
 
-                child._CalculateChildSize();
+            if (Size.X >= 0 && HorizontalAlignment != HorizontalAlignment.Stretch)
+                RenderSize = new Vector2(Size.X, RenderSize.Y);
 
-                applyAuto(child);
-            }
+            if (Size.Y >= 0 && VerticalAlignment != VerticalAlignment.Stretch)
+                RenderSize = new Vector2(RenderSize.X, Size.Y);
+
+
+            if (HorizontalAlignment == HorizontalAlignment.Stretch || VerticalAlignment == VerticalAlignment.Stretch)
+                GUIManager._GUIElementsToStretch.Enqueue(this);
+
+
+            Rectangle areaTakenByChildern = _CalculateChildSize();
+            if (Size.X < 0)
+                RenderSize = new Vector2(areaTakenByChildern.Size.X + BorderSize * 2f, RenderSize.Y);
+            if (Size.Y < 0)
+                RenderSize = new Vector2(RenderSize.X, areaTakenByChildern.Size.Y + BorderSize * 2f);
+
+            RenderSize = new Vector2(MathF.Max(MinWidth, RenderSize.X), MathF.Max(MinHeight, RenderSize.Y));
+
+            if (notifyWhenDoneSizing)
+                GUIManager._GUIElementsToNotifyAfterSizing.Enqueue(this);
+
         }
 
-        protected virtual void applyChildStretch(GUIElement child)
+        internal virtual Rectangle _CalculateChildSize()
         {
-            switch (child.HorizontalAlignment)
-            {
-                case HorizontalAlignment.Stretch:
-                    child.RenderSize = new Vector2(InnerRect.Size.X, child.RenderSize.Y);
-                    child._LocalPosition = new Vector2(InnerRect.Left, child._LocalPosition.Y);
-                    break;
-                default:
-                    child.RenderSize = new Vector2(child.Size.X, child.RenderSize.Y);
-                    break;
-
-            }
-            switch (child.VerticalAlignment)
-            {
-                case VerticalAlignment.Stretch:
-                    child.RenderSize = new Vector2(child.RenderSize.X, InnerRect.Size.Y);
-                    child._LocalPosition = new Vector2(child._LocalPosition.X, InnerRect.Bottom);
-                    break;
-                default:
-                    child.RenderSize = new Vector2(child.RenderSize.X, child.Size.Y);
-                    break;
-            }
-        }
-
-        protected virtual void applyAuto(GUIElement childToWrap)
-        {
-            if (HorizontalAlignment != HorizontalAlignment.Stretch && Size.X < 0)
-            {
-                RenderSize = new Vector2(childToWrap.RenderSize.X + BorderSize * 2f, RenderSize.Y);
-            }
-
-            if (VerticalAlignment != VerticalAlignment.Stretch && Size.Y < 0)
-            {
-                RenderSize = new Vector2(RenderSize.X, childToWrap.RenderSize.Y + BorderSize * 2f);
-            }
-        }
-
-        internal virtual void _CalculateChildPosition()
-        {
-            if (_Children.Count == 0)
-                return;
+            float minX = float.MaxValue;
+            float maxX = float.MinValue;
+            float minY = float.MaxValue;
+            float maxY = float.MinValue;
 
             foreach (GUIElement child in _Children)
             {
-                applyChildAlignment(child);
-                child._CalculateChildPosition();
+                child._CalculateSize();
+                Rectangle outerRect = child.OuterRect;
+                minX = MathF.Min(minX, outerRect.Left);
+                maxX = MathF.Max(maxX, outerRect.Right);
+                minY = MathF.Min(minY, outerRect.Bottom);
+                maxY = MathF.Max(maxY, outerRect.Top);
             }
+            return new Rectangle(minX, minY, maxX - minX, maxY - minY);
         }
 
-        protected virtual void applyChildAlignment(GUIElement child)
+        internal virtual void _CalculatePosition()
         {
-            switch (child.HorizontalAlignment)
+            if (Parent == null)
+                _LocalPosition = Vector2.Zero;
+            else
             {
-                case HorizontalAlignment.Left:
-                    child._LocalPosition = new Vector2(InnerRect.Left, child._LocalPosition.Y);
-                    break;
-                case HorizontalAlignment.Right:
-                    child._LocalPosition = new Vector2(InnerRect.Right - child.RenderSize.X, child._LocalPosition.Y);
-                    break;
-                case HorizontalAlignment.Center:
-                    child._LocalPosition = new Vector2(InnerRect.Center.X - child.RenderSize.X / 2f, child._LocalPosition.Y);
-                    break;
+                switch (HorizontalAlignment)
+                {
+                    case HorizontalAlignment.Left:
+                        _LocalPosition = new Vector2(Parent.InnerRect.Left, _LocalPosition.Y);
+                        break;
+                    case HorizontalAlignment.Right:
+                        _LocalPosition = new Vector2(Parent.InnerRect.Right - RenderSize.X, _LocalPosition.Y);
+                        break;
+                    case HorizontalAlignment.Center:
+                        _LocalPosition = new Vector2(Parent.InnerRect.Center.X - RenderSize.X / 2f, _LocalPosition.Y);
+                        break;
+                    case HorizontalAlignment.Stretch:
+                        _LocalPosition = new Vector2(Parent.InnerRect.Left, _LocalPosition.Y);
+                        break;
+                }
+                switch (VerticalAlignment)
+                {
+                    case VerticalAlignment.Top:
+                        _LocalPosition = new Vector2(_LocalPosition.X, Parent.InnerRect.Top - RenderSize.Y);
+                        break;
+                    case VerticalAlignment.Bottom:
+                        _LocalPosition = new Vector2(_LocalPosition.X, Parent.InnerRect.Bottom);
+                        break;
+                    case VerticalAlignment.Center:
+                        _LocalPosition = new Vector2(_LocalPosition.X, Parent.InnerRect.Center.Y - RenderSize.Y / 2f);
+                        break;
+                    case VerticalAlignment.Stretch:
+                        _LocalPosition = new Vector2(_LocalPosition.X, Parent.InnerRect.Bottom);
+                        break;
+                }
             }
-            switch (child.VerticalAlignment)
-            {
-                case VerticalAlignment.Top:
-                    child._LocalPosition = new Vector2(child._LocalPosition.X, InnerRect.Top - child.RenderSize.Y);
-                    break;
-                case VerticalAlignment.Bottom:
-                    child._LocalPosition = new Vector2(child._LocalPosition.X, InnerRect.Bottom);
-                    break;
-                case VerticalAlignment.Center:
-                    child._LocalPosition = new Vector2(child._LocalPosition.X, InnerRect.Center.Y - child.RenderSize.Y / 2f);
-                    break;
-            }
+            _CalculateChildPositions();
         }
+
+        internal virtual void _CalculateChildPositions()
+        {
+            foreach (GUIElement child in _Children)
+                child._CalculatePosition();
+        }
+
+        internal virtual void _ApplyStretch()
+        {
+            if (HorizontalAlignment == Enums.HorizontalAlignment.Stretch)
+                RenderSize = new Vector2(Parent.InnerRect.Size.X, RenderSize.Y);
+            if (VerticalAlignment == Enums.VerticalAlignment.Stretch)
+                RenderSize = new Vector2(RenderSize.X, Parent.InnerRect.Size.Y);
+        }
+
+        internal virtual void _DoneSizing() { }
     }
 }

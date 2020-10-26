@@ -14,14 +14,13 @@ namespace OpenTKGUI.GUIElements
 {
     public class TextBox : GUIControl
     {
-        public float MinWidth = 0;
-        public float MinHeight = 0;
-
         public string Text
         {
             get { return _lbl.Text; }
             set { _lbl.Text = value; }
         }
+
+        public new float BorderSize { get { return _frame.BorderSize; } set { _frame.BorderSize = value; } }
 
         public Color4 TextColor
         {
@@ -30,6 +29,7 @@ namespace OpenTKGUI.GUIElements
         }
 
         public Color4 BackgroundColor { get { return _frame.Color; } set { _frame.Color = value; } }
+        public new Color4 BorderColor { get { return _frame.BorderColor; } set { _frame.BorderColor = value; } }
 
         Frame _frame;
         Label _lbl;
@@ -43,6 +43,10 @@ namespace OpenTKGUI.GUIElements
             _frame.VerticalAlignment = Enums.VerticalAlignment.Stretch;
 
             _lbl = new Label("", font);
+            _lbl.Size = new Vector2(-1, font.LineHeight);
+
+            _ForceAddChild(_frame);
+            _ForceAddChild(_lbl);
 
             OnTextInput = new Action<TextInputEventArgs>((a) =>
             {
@@ -64,25 +68,9 @@ namespace OpenTKGUI.GUIElements
             base.Draw(parentGlobalPosition, depth);
         }
 
-        internal override void _CalculateChildSize()
+        internal override void _CalculateSize()
         {
-            _lbl.Size = Size;
-            applyAuto(_lbl);
-            _lbl._CalculateChildSize();
-            applyChildStretch(_frame);
-        }
-
-        protected override void applyAuto(GUIElement childToWrap)
-        {
-            if (HorizontalAlignment != HorizontalAlignment.Stretch && Size.X < 0)
-            {
-                RenderSize = new Vector2(MathF.Max(childToWrap.RenderSize.X + BorderSize * 2f, MinWidth), RenderSize.Y);
-            }
-
-            if (VerticalAlignment != VerticalAlignment.Stretch && Size.Y < 0)
-            {
-                RenderSize = new Vector2(RenderSize.X, MathF.Max(childToWrap.RenderSize.Y + BorderSize * 2f, MinHeight));
-            }
+            base._CalculateSize();
         }
     }
 }

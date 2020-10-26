@@ -23,6 +23,9 @@ namespace OpenTKGUI
         internal static List<GUIElement> _QueuedForRemoval = new List<GUIElement>();
         internal static List<Tuple<GUIElement, GUIElement>> _QueuedToAdd = new List<Tuple<GUIElement, GUIElement>>();
 
+        internal static Queue<GUIElement> _GUIElementsToStretch = new Queue<GUIElement>();
+        internal static Queue<GUIElement> _GUIElementsToNotifyAfterSizing = new Queue<GUIElement>();
+
         private static int farClipping = 10000;
         public static void Init(GameWindow gameWindow)
         {
@@ -30,7 +33,7 @@ namespace OpenTKGUI
 
             GameWindow = gameWindow;
             Root = new Root();
-            Root.RenderSize = new Vector2(gameWindow.Size.X, gameWindow.Size.Y);
+            Root.Size = new Vector2(gameWindow.Size.X, gameWindow.Size.Y);
 
             _Transform = Matrix4.Identity;
             _Transform.M41 = -1;
@@ -69,8 +72,16 @@ namespace OpenTKGUI
 
         public static void CalculatePositionsAndSizes()
         {
-            Root._CalculateChildSize();
-            Root._CalculateChildPosition();
+            _GUIElementsToStretch.Clear();
+
+            Root._CalculateSize();
+
+            foreach (GUIElement stretch in _GUIElementsToStretch)
+                stretch._ApplyStretch();
+            foreach (GUIElement element in _GUIElementsToNotifyAfterSizing)
+                element._DoneSizing();
+
+            Root._CalculatePosition();
         }
 
         public static Vector2 GUIMousePosition()

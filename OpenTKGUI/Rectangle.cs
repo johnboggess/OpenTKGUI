@@ -13,11 +13,13 @@ namespace OpenTKGUI
         public float X
         {
             get { return Origin.X; }
+            set { Origin.X = value; }
         }
 
         public float Y
         {
             get { return Origin.Y; }
+            set { Origin.Y = value; }
         }
 
         public float Left { get { return Origin.X; } }

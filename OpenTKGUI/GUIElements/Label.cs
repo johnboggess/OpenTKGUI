@@ -59,17 +59,9 @@ namespace OpenTKGUI.GUIElements
             base.Draw(parentGlobalPosition, depth);
         }
 
-        internal override void _CalculateChildSize()
+        internal override Rectangle _CalculateChildSize()
         {
-            if (HorizontalAlignment != HorizontalAlignment.Stretch && Size.X < 0)
-            {
-                RenderSize = new Vector2(_RString.GetWidth(), RenderSize.Y);
-            }
-
-            if (VerticalAlignment != VerticalAlignment.Stretch && Size.Y < 0)
-            {
-                RenderSize = new Vector2(RenderSize.X, Font.LineHeight);
-            }
+            return new Rectangle(0, 0, _RString.GetWidth(), Font.LineHeight);
         }
 
         private void _matchTextSize()

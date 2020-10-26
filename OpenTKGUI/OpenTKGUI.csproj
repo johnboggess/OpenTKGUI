@@ -40,7 +40,6 @@
   <ItemGroup>
     <Folder Include="FontRendering\" />
     <Folder Include="Buffers\" />
-    <Folder Include="Enum\" />
   </ItemGroup>
 
 </Project>

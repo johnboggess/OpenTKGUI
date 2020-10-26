@@ -18,6 +18,13 @@ namespace OpenTKGUI.GUIElements
             base.AddChild(element);
         }
 
+        public GUIElement GetChild()
+        {
+            if(_Children.Count >= 1)
+                return _Children[0];
+            return null;
+        }
+
         public override void Draw(Vector2 parentGlobalPosition, int depth)
         {
             Shader.ColoredShader.Use();

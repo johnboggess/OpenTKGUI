@@ -18,26 +18,21 @@ namespace OpenTKGUI.GUIElements
         public Color4 TrackColor { get { return _Track.Color; } set { _Track.Color = value; } }
         public Color4 ThumbColor { get { return _Thumb.Color; } set { _Thumb.Color = value; } }
 
-        public float TrackHeight
-        {
-            get { return _trackHeight; }
-            set { _trackHeight = value; }
-        }
-        public float TrackLengthPadding
-        {
-            get { return _trackLengthPadding; }
-            set { _trackLengthPadding = value; }
-        }
-
         public float ThumbHeight
         {
-            get { return _thumbHeight; }
-            set { _thumbHeight = value; }
+            get { return _Thumb.Size.Y; }
+            set { _Thumb.Size.Y = value; }
         }
         public float ThumbWidth
         {
-            get { return _thumbWidth; }
-            set { _thumbWidth = value; }
+            get { return _Thumb.Size.X; }
+            set { _Thumb.Size.X = value; }
+        }
+
+        public float TrackHeight
+        {
+            get { return _Track.Size.Y; }
+            set { _Track.Size.Y = value; }
         }
 
         public float MinValue
@@ -66,13 +61,6 @@ namespace OpenTKGUI.GUIElements
         internal Frame _Track = new Frame() { Color = Color4.LightGray };
         internal Frame _Thumb = new Frame() { Color = Color4.Blue };
 
-
-        private float _trackHeight = 10;
-        private float _trackLengthPadding = 5;
-
-        private float _thumbHeight = 15;
-        private float _thumbWidth = 5;
-
         private float _minValue = 0;
         private float _maxValue = 1;
         private float _value = .5f;
@@ -82,12 +70,19 @@ namespace OpenTKGUI.GUIElements
         Random rnd = new Random();
         public Slider()
         {
+            ThumbWidth = 5;
+            ThumbHeight = 15;
+            TrackHeight = 5;
+
             _ForceAddChild(_Background);
-            _Background.AddChild(_Track);
-            _Track.AddChild(_Thumb);
+            _Background._ForceAddChild(_Track);
+            _Track._ForceAddChild(_Thumb);
 
             _Background.HorizontalAlignment = Enums.HorizontalAlignment.Stretch;
             _Background.VerticalAlignment = Enums.VerticalAlignment.Stretch;
+
+            _Track.HorizontalAlignment = Enums.HorizontalAlignment.Stretch;
+            _Track.VerticalAlignment = Enums.VerticalAlignment.Center;
 
             _Thumb.OnGlobalMouseMove = new Action<MouseMoveEventArgs>((a) =>
             {
@@ -113,30 +108,13 @@ namespace OpenTKGUI.GUIElements
             });
         }
 
-        internal override void _CalculateChildSize()
+        internal override void _CalculateChildPositions()
         {
-            applyChildStretch(_Background);
-            _Thumb.RenderSize = new Vector2(ThumbWidth, ThumbHeight);
-            _Track.RenderSize = new Vector2(RenderSize.X - TrackLengthPadding * 2f, TrackHeight);
-        }
-
-        internal override void _CalculateChildPosition()
-        {
-            _Track._LocalPosition = new Vector2(TrackLengthPadding, _Background.RenderSize.Y / 2f - TrackHeight / 2f);
+            _Background._CalculatePosition();
+            _Track._CalculatePosition();
 
             float xoffset = _Track.RenderSize.X * (Value / (MaxValue - MinValue));
             _Thumb._LocalPosition = new Vector2(xoffset - (ThumbWidth / 2f), -ThumbHeight / 2f + TrackHeight / 2f);
         }
-
-        /*internal override void _SizeChanged()
-        {
-            _Background.Size = Size;
-            _Track.Size = new Vector2(Size.X - TrackLengthPadding * 2f, TrackHeight);
-            _Track.LocalPosition = new Vector2(TrackLengthPadding, _Background.Size.Y / 2f - TrackHeight / 2f);
-
-            _Thumb.Size = new Vector2(ThumbWidth, ThumbHeight);
-            float xoffset = _Track.Size.X * (Value / (MaxValue - MinValue));
-            _Thumb.LocalPosition = new Vector2(xoffset - (ThumbWidth / 2f), -ThumbHeight / 2f + TrackHeight / 2f);
-        }*/
     }
 }
