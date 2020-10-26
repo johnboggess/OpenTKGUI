@@ -9,7 +9,7 @@ uniform vec4 TextColor;
 void main()
 {
     vec4 color = texture(tex, uv);
-    //color.w = 0;
-    //color.w = length(color)/1.0;
+    if(color.w == 0)
+        discard;
     FragColor = color * TextColor;
 } 
