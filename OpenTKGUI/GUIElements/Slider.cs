@@ -35,6 +35,12 @@ namespace OpenTKGUI.GUIElements
             set { _Track.Size.Y = value; }
         }
 
+        public float TrackPadding
+        {
+            get { return _Background.Padding.Left; }
+            set { _Background.Padding.Left = value; _Background.Padding.Right = value; }
+        }
+
         public float MinValue
         {
             get { return _minValue; }
@@ -73,6 +79,7 @@ namespace OpenTKGUI.GUIElements
             ThumbWidth = 5;
             ThumbHeight = 15;
             TrackHeight = 5;
+            TrackPadding = 5;
 
             _ForceAddChild(_Background);
             _Background._ForceAddChild(_Track);

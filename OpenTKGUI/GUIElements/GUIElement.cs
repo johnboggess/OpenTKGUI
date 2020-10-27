@@ -23,6 +23,8 @@ namespace OpenTKGUI.GUIElements
         public Color4 BorderColor = Color4.Black;
         public float BorderSize = 0;
 
+        public Padding Padding = new Padding();
+
         public Func<MouseButtonEventArgs, bool> OnMouseButton;
         public Action<MouseButtonEventArgs> OnGlobalMouseButton;
 
@@ -77,7 +79,7 @@ namespace OpenTKGUI.GUIElements
 
         public Rectangle InnerRect
         {
-            get { return new Rectangle(BorderSize, BorderSize, RenderSize.X - BorderSize*2f, RenderSize.Y - BorderSize*2f); }
+            get { return new Rectangle(BorderSize + Padding.Left, BorderSize+Padding.Bottom, RenderSize.X - BorderSize*2f - Padding.Right - Padding.Left, RenderSize.Y - BorderSize*2f - Padding.Top - Padding.Bottom); }
         }
         public Rectangle OuterRect { get { return new Rectangle(_LocalPosition, RenderSize); } }
 

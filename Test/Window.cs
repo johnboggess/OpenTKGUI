@@ -13,7 +13,9 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTKGUI.Shaders;
 using OpenTKGUI.GUIElements;
 using OpenTKGUI.FontRendering;
+using OpenTKGUI.Enums;
 using OpenTKGUI;
+using System.ComponentModel.Design;
 
 namespace Test
 {
@@ -43,8 +45,8 @@ namespace Test
             Frame frame = new Frame();
             frame.Color = Color4.Purple;
             frame.Size = new Vector2(10, 10);
-            frame.HorizontalAlignment = OpenTKGUI.Enums.HorizontalAlignment.Left;
-            frame.VerticalAlignment = OpenTKGUI.Enums.VerticalAlignment.Top;
+            frame.HorizontalAlignment = OpenTKGUI.Enums.HorizontalAlignment.Stretch;
+            frame.VerticalAlignment = OpenTKGUI.Enums.VerticalAlignment.Center;
             frame.BorderSize = 1;
             frame.BorderColor = Color.Red;
 
@@ -78,11 +80,11 @@ namespace Test
             verticalGrid.Size = new Vector2(-1, 100);
             verticalGrid.HorizontalAlignment = OpenTKGUI.Enums.HorizontalAlignment.Left;
             verticalGrid.VerticalAlignment = OpenTKGUI.Enums.VerticalAlignment.Top;
-            verticalGrid.AddChild(frame, VerticalGrid.Units.Ratio, 1);
-            verticalGrid.AddChild(textBox, VerticalGrid.Units.Ratio, 2);
+            //verticalGrid.AddChild(frame, Units.Ratio, 1);
+            //verticalGrid.AddChild(textBox, Units.Ratio, 2);
 
 
-            Frame.AddChild(verticalGrid);
+            Frame.AddChild(slider);
 
 
             GL.Enable(EnableCap.DepthTest);

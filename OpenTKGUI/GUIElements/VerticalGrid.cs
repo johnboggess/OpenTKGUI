@@ -99,13 +99,6 @@ namespace OpenTKGUI.GUIElements
             }
         }
 
-        public enum Units
-        {
-            Pixels,
-            Ratio,
-            Auto
-        }
-
         public class Row
         {
             public Units Units;
