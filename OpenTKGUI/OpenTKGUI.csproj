@@ -4,12 +4,12 @@
     <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <Platforms>AnyCPU;x64;x86</Platforms>
-    <Version>0.0.5</Version>
+    <Version>0.0.6</Version>
     <Authors>John Boggess</Authors>
     <Company>John Boggess</Company>
     <Description>Simple GUI for OpenTK 4</Description>
     <PackageId>OpenTKGUI-JB</PackageId>
-    <PackageReleaseNotes>Fixed crash when attempting to remove/add gui elements during the draw/event calls</PackageReleaseNotes>
+    <PackageReleaseNotes>GUI elements are now positioned based off their Horizontal/Vertical Alignment. Size can be set to a negative value to indicate the GUI element should wrap its childern. Added Horizontal/Vertical grid containers.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
