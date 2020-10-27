@@ -45,12 +45,12 @@ namespace OpenTKGUI.GUIElements
             foreach (Column column in _columns)
             {
                 if (column.Units == Units.Pixels)
-                    column._GUIElement.Size = new Vector2(column.Width, column._GUIElement.Size.Y);
+                    column._GUIElement.Size = new Vector2(column.Width, Size.Y);
                 else if (column.Units == Units.Auto)
-                    column._GUIElement.Size = new Vector2(-1, column._GUIElement.Size.Y);
+                    column._GUIElement.Size = new Vector2(-1, Size.Y);
                 else if (column.Units == Units.Ratio)
                 {
-                    column._GUIElement.Size = new Vector2(-1, column._GUIElement.Size.Y);
+                    column._GUIElement.Size = new Vector2(-1, Size.Y);
                     totalRatio += column.Width;
                 }
 

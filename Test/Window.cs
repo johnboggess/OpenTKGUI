@@ -71,11 +71,18 @@ namespace Test
             horizontalGrid.Size = new Vector2(-1, 100);
             horizontalGrid.HorizontalAlignment = OpenTKGUI.Enums.HorizontalAlignment.Left;
             horizontalGrid.VerticalAlignment = OpenTKGUI.Enums.VerticalAlignment.Top;
-            horizontalGrid.AddChild(frame, HorizontalGrid.Units.Ratio, 1);
-            horizontalGrid.AddChild(textBox, HorizontalGrid.Units.Ratio, 2);
+            //horizontalGrid.AddChild(frame, HorizontalGrid.Units.Ratio, 1);
+            //horizontalGrid.AddChild(textBox, HorizontalGrid.Units.Ratio, 2);
+
+            VerticalGrid verticalGrid = new VerticalGrid();
+            verticalGrid.Size = new Vector2(-1, 100);
+            verticalGrid.HorizontalAlignment = OpenTKGUI.Enums.HorizontalAlignment.Left;
+            verticalGrid.VerticalAlignment = OpenTKGUI.Enums.VerticalAlignment.Top;
+            verticalGrid.AddChild(frame, VerticalGrid.Units.Ratio, 1);
+            verticalGrid.AddChild(textBox, VerticalGrid.Units.Ratio, 2);
 
 
-            Frame.AddChild(horizontalGrid);
+            Frame.AddChild(verticalGrid);
 
 
             GL.Enable(EnableCap.DepthTest);
