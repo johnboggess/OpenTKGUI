@@ -37,7 +37,7 @@ namespace Test
             Frame.Size = new Vector2(200, 200);
             Frame.BorderSize = 2;
             Frame.BorderColor = Color4.Black;
-            Frame.Color = Color4.LightGray;
+            Frame.Color = Color4.Turquoise;
             Frame.HorizontalAlignment = OpenTKGUI.Enums.HorizontalAlignment.Left;
             Frame.VerticalAlignment = OpenTKGUI.Enums.VerticalAlignment.Center;
             GUIManager.Root.AddChild(Frame);
@@ -69,6 +69,18 @@ namespace Test
             Slider slider = new Slider();
             slider.Size = new Vector2(100, 32);
 
+            Button btn = new Button("Button Test", FontManager.GetFont("Arial", 32));
+            btn.Size = new Vector2(150, 50);
+            btn.BorderSize = 1;
+            btn.BorderColor = Color4.Black;
+            btn.OnMouseButton = new Func<MouseButtonEventArgs, bool>((a) =>
+            {
+                if(a.IsPressed && a.Button == MouseButton.Left)
+                    Console.WriteLine("Clicked");
+                btn.OnMouseButtonAdjustColor(a);
+                return false;
+            });
+
             HorizontalGrid horizontalGrid = new HorizontalGrid();
             horizontalGrid.Size = new Vector2(-1, 100);
             horizontalGrid.HorizontalAlignment = OpenTKGUI.Enums.HorizontalAlignment.Left;
@@ -84,7 +96,7 @@ namespace Test
             //verticalGrid.AddChild(textBox, Units.Ratio, 2);
 
 
-            Frame.AddChild(slider);
+            Frame.AddChild(btn);
 
 
             GL.Enable(EnableCap.DepthTest);

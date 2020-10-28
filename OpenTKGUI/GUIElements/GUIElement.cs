@@ -28,6 +28,8 @@ namespace OpenTKGUI.GUIElements
         public Func<MouseButtonEventArgs, bool> OnMouseButton;
         public Action<MouseButtonEventArgs> OnGlobalMouseButton;
 
+        public Action<MouseMoveEventArgs> OnMouseEnter;
+        public Action<MouseMoveEventArgs> OnMouseExit;
         public Action<MouseMoveEventArgs> OnGlobalMouseMove;
 
         public Action<KeyboardKeyEventArgs> OnKeyDown;
@@ -44,6 +46,8 @@ namespace OpenTKGUI.GUIElements
         internal List<GUIElement> _Children = new List<GUIElement>();
 
         protected bool notifyWhenDoneSizing = false;
+
+        private bool _mouseEntered = false;
 
         internal Vector2 _LocalPosition
         {
@@ -157,7 +161,20 @@ namespace OpenTKGUI.GUIElements
 
         internal void _GlobalMouseMoveEvent(MouseMoveEventArgs args)
         {
-            if (OnGlobalMouseMove != null)
+            if (IsPointInside(args.Position))
+            {
+                if (OnMouseEnter != null && _mouseEntered == false)
+                    OnMouseEnter.Invoke(args);
+                _mouseEntered = true;
+            }
+            else if (!IsPointInside(args.Position))
+            {
+                if (OnMouseExit != null && _mouseEntered == true)
+                    OnMouseExit.Invoke(args);
+                _mouseEntered = false;
+            }
+
+                if (OnGlobalMouseMove != null)
                 OnGlobalMouseMove.Invoke(args);
             foreach (GUIElement child in _Children)
                 child._GlobalMouseMoveEvent(args);

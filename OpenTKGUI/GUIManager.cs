@@ -10,6 +10,7 @@ using OpenTK.Mathematics;
 using OpenTKGUI.GUIElements;
 using OpenTKGUI.Shaders;
 using System.Runtime.CompilerServices;
+using OpenTK.Graphics.OpenGL;
 
 namespace OpenTKGUI
 {
@@ -115,7 +116,7 @@ namespace OpenTKGUI
 
             GameWindow.MouseMove += new Action<MouseMoveEventArgs>((a) =>
             {
-                Root._GlobalMouseMoveEvent(a);
+                Root._GlobalMouseMoveEvent(new MouseMoveEventArgs(GUIManager.GUIMousePosition(), new Vector2(a.DeltaX, -a.DeltaY)));
             });
 
             GameWindow.KeyDown += new Action<KeyboardKeyEventArgs>((a) =>

@@ -12,6 +12,10 @@
     <PackageReleaseNotes>GUI elements are now positioned based off their Horizontal/Vertical Alignment. Size can be set to a negative value to indicate the GUI element should wrap its childern. Added Horizontal/Vertical grid containers.</PackageReleaseNotes>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Shaders\OpenTKGUIColored.vert" />
     <None Remove="Shaders\OpenTKGUIDefault.frag" />
